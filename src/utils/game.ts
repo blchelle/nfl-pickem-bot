@@ -4,6 +4,8 @@ import { GameRank, OfpData } from "../@types/ofpData";
 import spreadToWinPercent from "../data/spreadConversion";
 import ofpTeamToOddsApiTeam from "../data/teamConversion";
 
+const MAX_RANK = 16;
+
 export const calcAvgGamePoints = (game: GameData, totalPoints: number) => {
   const awayPoints = game[0].pointDist * game[0].winProb * totalPoints;
   const homePoints = game[1].pointDist * game[1].winProb * totalPoints;
@@ -14,9 +16,9 @@ export const calcAvgGamePoints = (game: GameData, totalPoints: number) => {
 export const calcNetResultPoints = (game: GameData, pick: 0 | 1, rank: GameRank, totalPoints: number): ResultPoints => {
   const avgGamePoints = calcAvgGamePoints(game, totalPoints);
 
-  const win = rank - avgGamePoints;
-  const lose = -avgGamePoints;
-  const avg = win * game[pick].winProb + lose * game[1 - pick].winProb;
+  const win = +(rank - avgGamePoints).toFixed(3);
+  const lose = +(-avgGamePoints).toFixed(3);
+  const avg = +(win * game[pick].winProb + lose * game[1 - pick].winProb).toFixed(3);
 
   return { avg, lose, win };
 };
@@ -52,4 +54,24 @@ export const mergeOfpAndOddsData = (ofpGames: OfpData, oddsGames: OddsData) => {
       }
     ]
   })
+}
+
+export const generateOutcomes = (games: GameData[]) => {
+  const maxPoints = new Array(games.length).fill(null).reduce((acc, _, i) => acc + MAX_RANK - i, 0)
+  const outcomes = []
+
+  for (let i = 0; i < games.length; i++) {
+    const gameOutcomes = []
+
+    for (let rank = MAX_RANK; rank > MAX_RANK - games.length; rank--) {
+      const rankOutcomes = []
+      rankOutcomes.push(calcNetResultPoints(games[i], 0, rank as GameRank, maxPoints))
+      rankOutcomes.push(calcNetResultPoints(games[i], 1, rank as GameRank, maxPoints))
+      gameOutcomes.push(rankOutcomes)
+    }
+
+    outcomes.push(gameOutcomes)
+  }
+
+  return outcomes
 }

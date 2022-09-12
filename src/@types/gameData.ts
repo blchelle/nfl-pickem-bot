@@ -4,7 +4,7 @@ interface TeamData {
   winProb: number
 };
 
-export type GameData = [TeamData, TeamData];
+export type GameData = TeamData[];
 
 export interface ResultPoints {
   avg: number,
