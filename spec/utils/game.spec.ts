@@ -1,5 +1,7 @@
-import { calcAvgGamePoints, calcNetResultPoints } from '../../src/utils/game';
+import { calcAvgGamePoints, calcNetResultPoints, mergeOfpAndOddsData } from '../../src/utils/game';
 import { GameData, ResultPoints } from '../../src/@types/gameData';
+import { OfpData } from '../../src/@types/ofpData';
+import { OddsData } from '../../src/@types/oddsData';
 
 const testGame: GameData = [
   {
@@ -29,5 +31,76 @@ describe(calcNetResultPoints, () => {
   it ('calculates the point results for a win, loss, and avg for 16 seed', () => {
     const expected: ResultPoints = { avg: 2.25, lose: -1.75, win: 14.25 }
     expect(calcNetResultPoints(testGame, 0, 16, 100)).toStrictEqual(expected)
+  })
+})
+
+const testOfpData: OfpData = [
+  [
+    { team: "la rams", pointsPercent: 0.03 },
+    { team: "ny jets", pointsPercent: 0.03 },
+  ]
+]
+
+const testOddsData: OddsData = [
+  {
+    away_team: "Los Angeles Rams",
+    home_team: "New York Jets",
+    bookmakers: [
+      {
+        markets: [
+          {
+            outcomes: [
+              { name: "Los Angeles Rams", point: -7 },
+              { name: "New York Jets", point: 7 },
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]
+
+describe(mergeOfpAndOddsData, () => {
+  let expected: GameData[]
+
+  beforeEach(() => {
+    expected = [
+      [
+        { name: "la rams", pointDist: 0.03, winProb: 0.752 },
+        { name: "ny jets", pointDist: 0.03, winProb: 0.248 }
+      ]
+    ]
+  })
+
+  it('merges data when matches are found for all games', () => {
+    expect(mergeOfpAndOddsData(testOfpData, testOddsData)).toStrictEqual(expected)
+  })
+  
+  it('merges data when spread outcomes have a flipped order', () => {
+    // Swaps the ordering of the outcomes to ensure that it works either way
+    const outcomes = testOddsData[0].bookmakers[0].markets[0].outcomes;
+    const temp = outcomes[0];
+    outcomes[0] = outcomes[1];
+    outcomes[1] = temp; 
+
+    expect(mergeOfpAndOddsData(testOfpData, testOddsData)).toStrictEqual(expected);
+  })
+
+  it('merges data when team names have different casing', () => {
+    testOddsData[0].away_team = 'los Angeles rams';
+
+    expect(mergeOfpAndOddsData(testOfpData, testOddsData)).toStrictEqual(expected);
+  })
+
+  it('exits when home and away teams are flipped', () => {
+    testOddsData[0].home_team = 'los angeles rams';
+    testOddsData[0].away_team = 'new york jets';
+
+    expect(() => mergeOfpAndOddsData(testOfpData, testOddsData)).toThrow();
+  })
+
+  it('exits when no odds can be found for any game', () => {
+    testOddsData[0].home_team = 'edmonton oilers';
+    expect(() => mergeOfpAndOddsData(testOfpData, testOddsData)).toThrow();
   })
 })
