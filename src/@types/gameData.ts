@@ -5,3 +5,9 @@ interface TeamData {
 };
 
 export type GameData = [TeamData, TeamData];
+
+export interface ResultPoints {
+  avg: number,
+  lose: number,
+  win: number
+};
