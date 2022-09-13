@@ -1,4 +1,4 @@
-type SpreadToProbMap = {
+interface SpreadToProbMap {
   [key: number]: number
 }
 
@@ -40,8 +40,8 @@ const SPREAD_TO_PROB: SpreadToProbMap = {
   17: 1
 }
 
-const spreadToWinPercent = (spread: number) => {
-  const favoriteWinChance = SPREAD_TO_PROB[Math.abs(spread)] ?? 1;
+const spreadToWinPercent = (spread: number): number => {
+  const favoriteWinChance = SPREAD_TO_PROB[Math.abs(spread)] ?? 1
   return spread < 0 ? favoriteWinChance : 1 - favoriteWinChance
 }
 
