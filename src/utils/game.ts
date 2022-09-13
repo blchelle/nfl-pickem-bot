@@ -1,14 +1,13 @@
 import { GameData, ResultPoints } from "../@types/gameData";
 import { OddsData } from "../@types/oddsData";
 import { GameRank, OfpData } from "../@types/ofpData";
+import { AWAY, HOME, MAX_RANK } from "../constants";
 import spreadToWinPercent from "../data/spreadConversion";
 import ofpTeamToOddsApiTeam from "../data/teamConversion";
 
-const MAX_RANK = 16;
-
 export const calcAvgGamePoints = (game: GameData, totalPoints: number) => {
-  const awayPoints = game[0].pointDist * game[0].winProb * totalPoints;
-  const homePoints = game[1].pointDist * game[1].winProb * totalPoints;
+  const awayPoints = game[AWAY].pointDist * game[AWAY].winProb * totalPoints;
+  const homePoints = game[HOME].pointDist * game[HOME].winProb * totalPoints;
 
   return +(awayPoints + homePoints).toFixed(3);
 };
@@ -25,8 +24,8 @@ export const calcNetResultPoints = (game: GameData, pick: 0 | 1, rank: GameRank,
 
 export const mergeOfpAndOddsData = (ofpGames: OfpData, oddsGames: OddsData) => {
   return ofpGames.map((game) => {
-    const away = game[0]
-    const home = game[1]
+    const away = game[AWAY]
+    const home = game[HOME]
 
     const matchingGame = oddsGames.find((game) => (
       ofpTeamToOddsApiTeam(away.team) == game.away_team.toLowerCase() && 
