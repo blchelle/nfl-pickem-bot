@@ -5,13 +5,13 @@ interface GameToPick {
   [gameIndex: number]: { pick: number, rank: number, won?: number } | undefined
 }
 
-interface BestPick {
+export interface BestPicks {
   net: number
   picks: Array<[number, number]>
 }
 
 interface Cache {
-  [remainingGames: string]: BestPick
+  [remainingGames: string]: BestPicks
 }
 
 export const getBestPicks = (
@@ -20,7 +20,7 @@ export const getBestPicks = (
   gamesPicked: GameToPick = {},
   ranksPicked: Set<number> = new Set(),
   cache: Cache = { '': { net: 0, picks: [] } }
-): BestPick => {
+): BestPicks => {
   const remainingRanks = new Array(gameData.length).fill(null).map((_, i) => MAX_RANK - i).filter((rank) => !ranksPicked.has(rank))
   const cacheKey = remainingRanks.join(' ')
   if (cache[cacheKey] !== undefined) {
@@ -30,7 +30,7 @@ export const getBestPicks = (
   const gamePick = gamesPicked[gameIndex]
   if (gamePick !== undefined) {
     const gameRankPickData = gameData[gameIndex][MAX_RANK - gamePick.rank][gamePick.pick]
-    const pickData: BestPick = {
+    const pickData: BestPicks = {
       net: (gamePick.won === 0) ? gameRankPickData.lose : gameRankPickData.win,
       picks: [[gamePick.pick, gamePick.rank]]
     }
@@ -43,12 +43,12 @@ export const getBestPicks = (
     return pickData
   }
 
-  const bestPickData: BestPick = { net: Number.MIN_SAFE_INTEGER, picks: [] }
+  const bestPickData: BestPicks = { net: Number.MIN_SAFE_INTEGER, picks: [] }
   remainingRanks.forEach((rank) => {
     const gameRankData = gameData[gameIndex][MAX_RANK - rank]
 
     let teamPicked: 0 | 1
-    const pickData: BestPick = { net: 0, picks: [] }
+    const pickData: BestPicks = { net: 0, picks: [] }
     if (gameRankData[AWAY].avg > gameRankData[HOME].avg) {
       pickData.net = gameRankData[AWAY].avg
       pickData.picks = [[AWAY, rank]]
