@@ -7,5 +7,4 @@ interface OfpOutcome {
   won?: boolean
 }
 
-export type OfpData = [OfpOutcome, OfpOutcome][]
-
+export type OfpData = Array<[OfpOutcome, OfpOutcome]>
