@@ -2,6 +2,7 @@ interface TeamData {
   name: string
   pointDist: number
   winProb: number
+  rank?: number
 };
 
 export type GameData = TeamData[]

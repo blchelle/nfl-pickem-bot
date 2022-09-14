@@ -2,7 +2,7 @@ import { GameData, ResultPoints } from '../@types/gameData'
 import { BestPicks } from '../bestPicks'
 import { MAX_RANK } from '../constants'
 
-export const displayPicks = (gamesData: GameData[], pointsData: ResultPoints[][][], results: BestPicks): void => {
+export const displayPicks = (gamesData: GameData[], pointsData: ResultPoints[][][], results: BestPicks, winProb?: number): void => {
   results.picks.forEach(([pick, rank], i) => {
     const pointData = pointsData[i][MAX_RANK - rank][pick]
     const pointsAvg = pointData.avg.toFixed(2)
@@ -24,4 +24,6 @@ export const displayPicks = (gamesData: GameData[], pointsData: ResultPoints[][]
   })
 
   console.log(`\nNet Points Gained: ${results.net.toFixed(3)}`)
+  if (winProb !== undefined) console.log(`Win Probability: ${winProb}`)
+  console.log()
 }
