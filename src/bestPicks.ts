@@ -1,7 +1,7 @@
 import { ResultPoints } from './@types/gameData'
 import { AWAY, HOME, MAX_RANK } from './constants'
 
-interface GameToPick {
+export interface GameToPick {
   [gameIndex: number]: { pick: number, rank: number, won?: number } | undefined
 }
 
