@@ -10,13 +10,15 @@ import env from './env'
 
 import TEST_ODDS_DATA_JSON from './data/testOddsData.json'
 import TEST_OFP_DATA_JSON from './data/testOfficeFootballPoolData.json'
+import { getOddsData } from './odds'
 
 const TEST_OFP_DATA = TEST_OFP_DATA_JSON as unknown as OfpData
 const TEST_ODDS_DATA = TEST_ODDS_DATA_JSON as unknown as OddsData;
 
 (async () => {
   const ofpData = env.useOfp ? await getOfpData() : TEST_OFP_DATA
-  const games = mergeOfpAndOddsData(ofpData, TEST_ODDS_DATA)
+  const oddsData = env.useOdds ? await getOddsData() : TEST_ODDS_DATA
+  const games = mergeOfpAndOddsData(ofpData, oddsData)
   const outcomes = generateOutcomes(games)
 
   console.log('Calculating the best picks to win the season')

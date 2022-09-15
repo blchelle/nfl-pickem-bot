@@ -22,7 +22,7 @@ export const getBestWeeklyPicks = (games: GameData[], outcomes: ResultPoints[][]
 
   let totalIterations = 0
   const combinations = []
-  for (let i = 1; i <= 3; i++) {
+  for (let i = 1; i <= 2; i++) {
     const kCombinations = chooseK(gameIndexes, i)
     totalIterations += kCombinations.length * Math.pow(2, i)
     combinations.push(...kCombinations)

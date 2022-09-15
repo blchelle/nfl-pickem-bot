@@ -24,5 +24,5 @@ export const displayPicks = (gamesData: GameData[], pointsData: ResultPoints[][]
   })
 
   console.log(`\nNet Points Gained: ${results.net.toFixed(3)}`)
-  if (winProb !== undefined) console.log(`Win Probability: ${winProb}`)
+  if (winProb !== undefined) console.log(`Win Probability: ${winProb.toFixed(3)}`)
 }
