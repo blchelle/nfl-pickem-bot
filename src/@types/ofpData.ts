@@ -5,4 +5,4 @@ interface OfpOutcome {
   won?: boolean
 }
 
-export type OfpData = Array<[OfpOutcome, OfpOutcome]>
+export type OfpData = OfpOutcome[][]
