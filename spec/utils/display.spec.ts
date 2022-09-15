@@ -40,7 +40,7 @@ describe(displayPicks, () => {
     displayPicks(testGame, testOutcomes, testPicks, 0.5)
     const expected = '     Away Team over Home Team          16 confidence     Win:    8.00     Loss:   -3.00     Net:    4.00\n' +
                     'Net Points Gained: -2.000' +
-                    'Win Probability: 0.5'
+                    'Win Probability: 0.500'
 
     expect(output).toBe(expected)
   })
