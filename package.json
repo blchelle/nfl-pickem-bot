@@ -13,6 +13,7 @@
   },
   "devDependencies": {
     "@types/cli-progress": "^3.11.0",
+    "@types/dotenv": "^8.2.0",
     "@types/jest": "^29.0.1",
     "@typescript-eslint/eslint-plugin": "^5.0.0",
     "eslint": "^8.0.1",
@@ -26,6 +27,8 @@
     "typescript": "*"
   },
   "dependencies": {
-    "cli-progress": "^3.11.2"
+    "cli-progress": "^3.11.2",
+    "dotenv": "^16.0.2",
+    "puppeteer": "^17.1.3"
   }
 }
