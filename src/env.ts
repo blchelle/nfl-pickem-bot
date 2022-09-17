@@ -9,6 +9,7 @@ dotenv.config()
 interface Env {
   odds: OddsEnv
   ofp: OfpEnv
+  schedule: ScheduleEnv
 }
 
 interface OddsEnv {
@@ -28,6 +29,11 @@ export interface OfpAccount {
   email?: string
   password?: string
   getBestPicksFn: (games: GameData[], outcomes: ResultPoints[][][]) => [BestPicks, number]
+}
+
+interface ScheduleEnv {
+  apiKey?: string
+  getScheduleData: boolean
 }
 
 const env: Env = {
@@ -54,6 +60,10 @@ const env: Env = {
         getBestPicksFn: getBestWeeklyPicks
       }
     ]
+  },
+  schedule: {
+    apiKey: process.env.NFL_SCHEDULE_API_KEY,
+    getScheduleData: process.argv.includes(flags.nflScheduleData.flag)
   }
 }
 

@@ -9,3 +9,8 @@ export const NET_TARGET = AVG_WINNER_POINTS_PER_WEEK - AVG_POINTS_PER_WEEK
 export const AVG_STANDARD_DEVIATION = 10.64
 
 export const OFP_BASE_URL = 'https://www.officefootballpool.com'
+
+export const MS_PER_SECOND = 1000
+export const MS_PER_MINUTE = 60 * MS_PER_SECOND
+export const MS_PER_HOUR = 60 * MS_PER_MINUTE
+export const MS_PER_DAY = 24 * MS_PER_HOUR
