@@ -1,0 +1,229 @@
+{
+  "message": "NFL Scheduled games",
+  "data": [
+    {
+      "date": "2022-09-16T00:15Z",
+      "venue": "GEHA Field at Arrowhead Stadium",
+      "name": "Los Angeles Chargers at Kansas City Chiefs",
+      "shortName": "LAC @ KC",
+      "awayTeam": {
+        "name": "Chargers",
+        "score": "24"
+      },
+      "homeTeam": {
+        "name": "Chiefs",
+        "score": "27"
+      }
+    },
+    {
+      "date": "2022-09-18T17:00Z",
+      "venue": "FirstEnergy Stadium",
+      "name": "New York Jets at Cleveland Browns",
+      "shortName": "NYJ @ CLE",
+      "awayTeam": {
+        "name": "Jets",
+        "score": "0"
+      },
+      "homeTeam": {
+        "name": "Browns",
+        "score": "0"
+      }
+    },
+    {
+      "date": "2022-09-18T17:00Z",
+      "venue": "Ford Field",
+      "name": "Washington Commanders at Detroit Lions",
+      "shortName": "WSH @ DET",
+      "awayTeam": {
+        "name": "Commanders",
+        "score": "0"
+      },
+      "homeTeam": {
+        "name": "Lions",
+        "score": "0"
+      }
+    },
+    {
+      "date": "2022-09-18T17:00Z",
+      "venue": "Caesars Superdome",
+      "name": "Tampa Bay Buccaneers at New Orleans Saints",
+      "shortName": "TB @ NO",
+      "awayTeam": {
+        "name": "Buccaneers",
+        "score": "0"
+      },
+      "homeTeam": {
+        "name": "Saints",
+        "score": "0"
+      }
+    },
+    {
+      "date": "2022-09-18T17:00Z",
+      "venue": "MetLife Stadium",
+      "name": "Carolina Panthers at New York Giants",
+      "shortName": "CAR @ NYG",
+      "awayTeam": {
+        "name": "Panthers",
+        "score": "0"
+      },
+      "homeTeam": {
+        "name": "Giants",
+        "score": "0"
+      }
+    },
+    {
+      "date": "2022-09-18T17:00Z",
+      "venue": "Acrisure Stadium",
+      "name": "New England Patriots at Pittsburgh Steelers",
+      "shortName": "NE @ PIT",
+      "awayTeam": {
+        "name": "Patriots",
+        "score": "0"
+      },
+      "homeTeam": {
+        "name": "Steelers",
+        "score": "0"
+      }
+    },
+    {
+      "date": "2022-09-18T17:00Z",
+      "venue": "TIAA Bank Field",
+      "name": "Indianapolis Colts at Jacksonville Jaguars",
+      "shortName": "IND @ JAX",
+      "awayTeam": {
+        "name": "Colts",
+        "score": "0"
+      },
+      "homeTeam": {
+        "name": "Jaguars",
+        "score": "0"
+      }
+    },
+    {
+      "date": "2022-09-18T17:00Z",
+      "venue": "M&T Bank Stadium",
+      "name": "Miami Dolphins at Baltimore Ravens",
+      "shortName": "MIA @ BAL",
+      "awayTeam": {
+        "name": "Dolphins",
+        "score": "0"
+      },
+      "homeTeam": {
+        "name": "Ravens",
+        "score": "0"
+      }
+    },
+    {
+      "date": "2022-09-18T20:05Z",
+      "venue": "SoFi Stadium",
+      "name": "Atlanta Falcons at Los Angeles Rams",
+      "shortName": "ATL @ LAR",
+      "awayTeam": {
+        "name": "Falcons",
+        "score": "0"
+      },
+      "homeTeam": {
+        "name": "Rams",
+        "score": "0"
+      }
+    },
+    {
+      "date": "2022-09-18T20:05Z",
+      "venue": "Levi's Stadium",
+      "name": "Seattle Seahawks at San Francisco 49ers",
+      "shortName": "SEA @ SF",
+      "awayTeam": {
+        "name": "Seahawks",
+        "score": "0"
+      },
+      "homeTeam": {
+        "name": "49ers",
+        "score": "0"
+      }
+    },
+    {
+      "date": "2022-09-18T20:25Z",
+      "venue": "AT&T Stadium",
+      "name": "Cincinnati Bengals at Dallas Cowboys",
+      "shortName": "CIN @ DAL",
+      "awayTeam": {
+        "name": "Bengals",
+        "score": "0"
+      },
+      "homeTeam": {
+        "name": "Cowboys",
+        "score": "0"
+      }
+    },
+    {
+      "date": "2022-09-18T20:25Z",
+      "venue": "Empower Field at Mile High",
+      "name": "Houston Texans at Denver Broncos",
+      "shortName": "HOU @ DEN",
+      "awayTeam": {
+        "name": "Texans",
+        "score": "0"
+      },
+      "homeTeam": {
+        "name": "Broncos",
+        "score": "0"
+      }
+    },
+    {
+      "date": "2022-09-18T20:25Z",
+      "venue": "Allegiant Stadium",
+      "name": "Arizona Cardinals at Las Vegas Raiders",
+      "shortName": "ARI @ LV",
+      "awayTeam": {
+        "name": "Cardinals",
+        "score": "0"
+      },
+      "homeTeam": {
+        "name": "Raiders",
+        "score": "0"
+      }
+    },
+    {
+      "date": "2022-09-19T00:20Z",
+      "venue": "Lambeau Field",
+      "name": "Chicago Bears at Green Bay Packers",
+      "shortName": "CHI @ GB",
+      "awayTeam": {
+        "name": "Bears",
+        "score": "0"
+      },
+      "homeTeam": {
+        "name": "Packers",
+        "score": "0"
+      }
+    },
+    {
+      "date": "2022-09-19T23:15Z",
+      "venue": "Highmark Stadium",
+      "name": "Tennessee Titans at Buffalo Bills",
+      "shortName": "TEN @ BUF",
+      "awayTeam": {
+        "name": "Titans",
+        "score": "0"
+      },
+      "homeTeam": {
+        "name": "Bills",
+        "score": "0"
+      }
+    },
+    {
+      "date": "2022-09-20T00:30Z",
+      "venue": "Lincoln Financial Field",
+      "name": "Minnesota Vikings at Philadelphia Eagles",
+      "shortName": "MIN @ PHI",
+      "awayTeam": {
+        "name": "Vikings",
+        "score": "0"
+      },
+      "homeTeam": {
+        "name": "Eagles",
+        "score": "0"
+      }
+    }
+  ]
+}

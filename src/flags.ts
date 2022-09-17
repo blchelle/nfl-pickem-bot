@@ -10,7 +10,11 @@ interface Flags {
 const flags: Flags = {
   help: {
     flag: '--help',
-    description: 'Add this flag to get live odds data from the-odds-api'
+    description: 'Learn about the different flags that can be passed'
+  },
+  nflScheduleData: {
+    flag: '--schedule-data',
+    description: 'Get live schedule data for the upcoming week'
   },
   oddsData: {
     flag: '--odds-data',
