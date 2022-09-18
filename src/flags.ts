@@ -28,6 +28,10 @@ const flags: Flags = {
     flag: '--ofp-make-picks',
     description: 'Automatically enter picks on OfficeFootbalPool.com'
   },
+  runNow: {
+    flag: '--run-now',
+    description: 'Runs the bots now without waiting for the scheduler'
+  },
   seasonBot: {
     flag: '--season-bot',
     description: 'Activate the season bot'

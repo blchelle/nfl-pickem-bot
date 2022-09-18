@@ -88,5 +88,6 @@ const executeBots = async (): Promise<void> => {
 
 (async () => {
   if (process.argv.includes(flags.help.flag) || env.ofp.bots.every(({ active }) => !active)) showInstructions()
+  else if (process.argv.includes(flags.runNow.flag)) await executeBots()
   else await scheduler()
 })().catch((e) => { console.log(e) })
