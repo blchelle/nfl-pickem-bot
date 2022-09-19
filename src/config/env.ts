@@ -1,23 +1,25 @@
 import dotenv from 'dotenv'
-import { GameData, ResultPoints } from './@types/gameData'
-import { BestPicks } from './bestPicks'
-import { getBestSeasonPicks } from './bestSeasonPicks'
-import { getBestWeeklyPicks } from './bestWeeklyPicks'
+import { GameData, ResultPoints } from '../@types/gameData'
+import { BestPicks } from '../bestPicks'
+import { getBestSeasonPicks } from '../bestSeasonPicks'
+import { getBestWeeklyPicks } from '../bestWeeklyPicks'
 import flags from './flags'
 dotenv.config()
 
 interface Env {
-  odds: OddsEnv
+  oddsApi: OddsEnv
   ofp: OfpEnv
-  schedule: ScheduleEnv
+  scheduleApi: ScheduleEnv
 }
 
 interface OddsEnv {
   apiKey?: string
+  host: string
   getOddsData: boolean
 }
 
 interface OfpEnv {
+  host: string
   getPicksData: boolean
   makePicks: boolean
   bots: OfpAccount[]
@@ -33,15 +35,18 @@ export interface OfpAccount {
 
 interface ScheduleEnv {
   apiKey?: string
+  host: string
   getScheduleData: boolean
 }
 
 const env: Env = {
-  odds: {
+  oddsApi: {
     apiKey: process.env.ODDS_API_KEY,
+    host: 'api.the-odds-api.com',
     getOddsData: process.argv.includes(flags.oddsData.flag)
   },
   ofp: {
+    host: 'officefootballpool.com',
     getPicksData: process.argv.includes(flags.ofpPicksData.flag),
     makePicks: process.argv.includes(flags.ofpMakePicks.flag),
     bots: [
@@ -61,8 +66,9 @@ const env: Env = {
       }
     ]
   },
-  schedule: {
+  scheduleApi: {
     apiKey: process.env.NFL_SCHEDULE_API_KEY,
+    host: 'https://nfl-schedule.p.rapidapi.com',
     getScheduleData: process.argv.includes(flags.nflScheduleData.flag)
   }
 }

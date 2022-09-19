@@ -2,7 +2,7 @@ import { GameData, ResultPoints } from '../@types/gameData'
 import { OddsData } from '../@types/oddsData'
 import { OfpData } from '../@types/ofpData'
 import { GameToPick } from '../bestPicks'
-import { AWAY, HOME, MAX_RANK } from '../constants'
+import { AWAY, HOME, MAX_RANK } from '../config/constants'
 import spreadToWinPercent from '../data/spreadConversion'
 import ofpTeamToOddsApiTeam from '../data/teamConversion'
 

@@ -1,5 +1,7 @@
 import { ElementHandle, Page } from 'puppeteer'
-import { AWAY, HOME, OFP_BASE_URL } from '../constants'
+import { AWAY, HOME } from '../config/constants'
+import env from '../config/env'
+import { buildUrl } from '../utils/url'
 import { elementHandleHasClass, findElementWithInnerHTML, simulateClick } from './utils'
 
 interface GameInputs {
@@ -107,7 +109,7 @@ const submitPicks = async (page: Page): Promise<void> => {
  * @param picks the picks decided by the bot
  */
 export const makePicks = async (page: Page, picks: number[][]): Promise<void> => {
-  await page.goto(`${OFP_BASE_URL}/picks.cfm?p=1`)
+  await page.goto(buildUrl(env.ofp.host, 'picks.cfm', { p: '1' }))
 
   const pickButtons = await getPickButtons(page)
   const rankPickers = await getRankPickers(page)
