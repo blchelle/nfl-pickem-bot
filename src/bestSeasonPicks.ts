@@ -1,6 +1,6 @@
 import { GameData, ResultPoints } from './@types/gameData'
 import { BestPicks, getBestPicks } from './bestPicks'
-import { AVG_STANDARD_DEVIATION, NET_TARGET } from './constants'
+import { AVG_STANDARD_DEVIATION, NET_TARGET } from './config/constants'
 import { getFixedGames } from './utils/game'
 import { zScoreToProb } from './utils/stats'
 

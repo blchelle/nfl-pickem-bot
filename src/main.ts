@@ -2,9 +2,9 @@ import puppeteer, { Browser, Page } from 'puppeteer'
 
 import { OddsData } from './@types/oddsData'
 import { OfpData } from './@types/ofpData'
-import { MS_PER_DAY, MS_PER_HOUR, MS_PER_MINUTE, MS_PER_SECOND } from './constants'
-import env from './env'
-import flags from './flags'
+import { MS_PER_DAY, MS_PER_HOUR, MS_PER_MINUTE, MS_PER_SECOND } from './config/constants'
+import env from './config/env'
+import flags from './config/flags'
 import { getOddsData } from './odds'
 import { getDailyFirstGames, getNflGamesThisWeek, ScheduleData } from './schedule'
 import { simulateWeek } from './simulator'
@@ -30,7 +30,7 @@ const showInstructions = (): void => {
 
 const scheduler = async (): Promise<void> => {
   while (true) {
-    const gameSchedule = env.schedule.getScheduleData ? await getNflGamesThisWeek() : TEST_SCHEDULE_DATA
+    const gameSchedule = env.scheduleApi.getScheduleData ? await getNflGamesThisWeek() : TEST_SCHEDULE_DATA
     const execSchedule = getDailyFirstGames(gameSchedule)
 
     while (execSchedule.length > 0) {
@@ -57,7 +57,7 @@ const scheduler = async (): Promise<void> => {
 const executeBots = async (): Promise<void> => {
   // Both bots can use the same set of odds data because it is unlikely to change
   // between the execution of each both and we only have 50 free API calls per month
-  const oddsData = env.odds.getOddsData ? await getOddsData() : TEST_ODDS_DATA
+  const oddsData = env.oddsApi.getOddsData ? await getOddsData() : TEST_ODDS_DATA
 
   for (const bot of env.ofp.bots) {
     if (!bot.active) continue

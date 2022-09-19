@@ -1,6 +1,6 @@
 import { GameData, ResultPoints } from '../@types/gameData'
 import { BestPicks } from '../bestPicks'
-import { MAX_RANK } from '../constants'
+import { MAX_RANK } from '../config/constants'
 
 export const displayPicks = (gamesData: GameData[], pointsData: ResultPoints[][][], results: BestPicks, winProb?: number): void => {
   results.picks.forEach(([pick, rank], i) => {

@@ -1,5 +1,6 @@
 import axios, { AxiosRequestConfig } from 'axios'
-import env from './env'
+import env from './config/env'
+import { buildUrl } from './utils/url'
 
 interface NflGame {
   date: string
@@ -25,8 +26,8 @@ export const getDailyFirstGames = (games: ScheduleData): Date[] => {
 }
 
 export const getNflGamesThisWeek = async (): Promise<ScheduleData> => {
-  if (env.schedule.apiKey === undefined) throw new Error('NFL Schedule API Key is missing')
+  if (env.scheduleApi.apiKey === undefined) throw new Error('NFL Schedule API Key is missing')
 
-  const reqOptions: AxiosRequestConfig = { headers: { 'X-RapidAPI-Key': env.schedule.apiKey, 'X-RapidAPI-Host': 'nfl-schedule.p.rapidapi.com' } }
-  return (await axios.get('https://nfl-schedule.p.rapidapi.com/v1/schedules', reqOptions)).data
+  const reqOptions: AxiosRequestConfig = { headers: { 'X-RapidAPI-Key': env.scheduleApi.apiKey, 'X-RapidAPI-Host': env.scheduleApi.host } }
+  return (await axios.get(buildUrl(env.scheduleApi.host, 'v1/schedules'), reqOptions)).data
 }

@@ -3,8 +3,9 @@ import path from 'path'
 import { Page } from 'puppeteer'
 
 import { OfpData } from '../@types/ofpData'
-import { AWAY, HOME, OFP_BASE_URL } from '../constants'
-import { OfpAccount } from '../env'
+import { AWAY, HOME } from '../config/constants'
+import env, { OfpAccount } from '../config/env'
+import { buildUrl } from '../utils/url'
 
 const deleteScreenshots = async (folderPath: string): Promise<void> => {
   const files = await fs.readdir(folderPath)
@@ -17,7 +18,7 @@ const login = async (page: Page, botAccount: OfpAccount): Promise<void> => {
   if (botAccount.email === undefined) throw new Error('OFP email is missing')
   if (botAccount.password === undefined) throw new Error('OFP password is missing')
 
-  await page.goto(OFP_BASE_URL)
+  await page.goto(buildUrl(env.ofp.host))
 
   const toggleLoginButtonSelector = '.header_button[onclick="toggleLogIn()'
   const toggleLoginButton = await page.waitForSelector(toggleLoginButtonSelector)
@@ -50,7 +51,7 @@ const login = async (page: Page, botAccount: OfpAccount): Promise<void> => {
 }
 
 const navigateToSearchPicksPage = async (page: Page): Promise<void> => {
-  await page.goto(`${OFP_BASE_URL}/picks.cfm?p=4`)
+  await page.goto(buildUrl(env.ofp.host, 'picks.cfm', { p: '4' }))
   await Promise.all([
     page.waitForNavigation({ waitUntil: ['load', 'networkidle0'] }),
     page.click('button[name="search"]')
@@ -84,7 +85,7 @@ const parsePicksTable = async (page: Page): Promise<OfpData> => {
 }
 
 const getCompletedGames = async (page: Page, games: OfpData): Promise<OfpData> => {
-  await page.goto(`${OFP_BASE_URL}/picks.cfm?p=1`)
+  await page.goto(buildUrl(env.ofp.host, 'picks.cfm', { p: '1' }))
 
   const pickedTeams = await page.$$eval('.btn-locked-picked div:first-child', (els) => els.map((el) => el.innerHTML.split(' (')[0]))
   const ranks = await page.$$eval('.rankResult', (els) => els.map((el) => +el.innerHTML))
