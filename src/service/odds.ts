@@ -1,7 +1,7 @@
 import axios from 'axios'
-import { OddsData } from './@types/oddsData'
-import env from './config/env'
-import { buildUrl } from './utils/url'
+import { OddsData } from '../@types/oddsData'
+import env from '@config/env'
+import { buildUrl } from '@utils/url'
 
 export const getOddsData = async (): Promise<OddsData> => {
   if (env.oddsApi.apiKey === undefined) throw new Error('odds apikey is missing')

@@ -1,8 +1,8 @@
 import { ElementHandle, Page } from 'puppeteer'
-import { AWAY, HOME } from '../config/constants'
-import env from '../config/env'
-import { buildUrl } from '../utils/url'
-import { elementHandleHasClass, findElementWithInnerHTML, simulateClick } from './utils'
+import { AWAY, HOME } from '@config/constants'
+import env from '@config/env'
+import { buildUrl } from '@utils/url'
+import { elementHandleHasClass, findElementWithInnerHTML, simulateClick } from '@webscraper/utils'
 
 interface GameInputs {
   buttons: ElementHandle[]

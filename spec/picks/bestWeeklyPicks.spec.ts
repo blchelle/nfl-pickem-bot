@@ -1,4 +1,4 @@
-import { getBestWeeklyPicks } from '../src/bestWeeklyPicks'
+import { getBestWeeklyPicks } from '@picks/bestWeeklyPicks'
 
 const testGames = [
   [

@@ -16,5 +16,14 @@
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
+    "baseUrl": "./",
+    "paths": {
+      "@config/*": ["src/config/*"],
+      "@data/*": ["src/data/*"],
+      "@picks/*": ["src/picks/*"],
+      "@service/*": ["src/service/*"],
+      "@webscraper/*": ["src/webscraper/*"],
+      "@utils/*": ["src/utils/*"]
+    }
   }
 }

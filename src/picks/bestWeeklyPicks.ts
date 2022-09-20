@@ -1,10 +1,10 @@
 import cliProgress from 'cli-progress'
 
-import { GameData, ResultPoints } from './@types/gameData'
-import { BestPicks, GameToPick, getBestPicks } from './bestPicks'
-import { AVG_STANDARD_DEVIATION, MAX_RANK, NET_TARGET } from './config/constants'
-import { getFixedGames } from './utils/game'
-import { chooseK, possibleScenarios, zScoreToProb } from './utils/stats'
+import { GameData, ResultPoints } from '../@types/gameData'
+import { BestPicks, GameToPick, getBestPicks } from '@picks/bestPicks'
+import { AVG_STANDARD_DEVIATION, MAX_RANK, NET_TARGET } from '@config/constants'
+import { getFixedGames } from '@utils/game'
+import { chooseK, possibleScenarios, zScoreToProb } from '@utils/stats'
 
 interface BestProb {
   prob: number

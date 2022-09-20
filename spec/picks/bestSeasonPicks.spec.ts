@@ -1,5 +1,5 @@
-import { GameData, ResultPoints } from '../src/@types/gameData'
-import { getBestSeasonPicks } from '../src/bestSeasonPicks'
+import { GameData, ResultPoints } from '../@types/gameData'
+import { getBestSeasonPicks } from '@picks/bestSeasonPicks'
 
 const testGames: GameData[] =
 [

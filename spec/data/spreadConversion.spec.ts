@@ -1,4 +1,4 @@
-import spreadToWinPercent from '../../src/data/spreadConversion'
+import spreadToWinPercent from '@data/spreadConversion'
 
 describe(spreadToWinPercent, () => {
   it('gives a 0.5 win chance when spread is 0', () => {
