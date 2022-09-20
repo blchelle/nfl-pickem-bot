@@ -1,4 +1,4 @@
-import { buildUrl } from '../../src/utils/url'
+import { buildUrl } from '@utils/url'
 
 describe(buildUrl, () => {
   it('builds a url with no path and no params', () => {

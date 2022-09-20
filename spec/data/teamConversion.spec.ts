@@ -1,4 +1,4 @@
-import ofpTeamToOddsApiTeam from '../../src/data/teamConversion'
+import ofpTeamToOddsApiTeam from '@data/teamConversion'
 
 describe(ofpTeamToOddsApiTeam, () => {
   it('works for a matching lowercase team name', () => {

@@ -1,5 +1,5 @@
-import { ResultPoints } from './@types/gameData'
-import { AWAY, HOME, MAX_RANK } from './config/constants'
+import { ResultPoints } from '../@types/gameData'
+import { AWAY, HOME, MAX_RANK } from '@config/constants'
 
 export interface GameToPick {
   [gameIndex: number]: { pick: number, rank: number, won?: number } | undefined

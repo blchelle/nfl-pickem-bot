@@ -1,8 +1,8 @@
-import { GameData, ResultPoints } from './@types/gameData'
-import { BestPicks, getBestPicks } from './bestPicks'
-import { AVG_STANDARD_DEVIATION, NET_TARGET } from './config/constants'
-import { getFixedGames } from './utils/game'
-import { zScoreToProb } from './utils/stats'
+import { GameData, ResultPoints } from '../@types/gameData'
+import { BestPicks, getBestPicks } from '@picks/bestPicks'
+import { AVG_STANDARD_DEVIATION, NET_TARGET } from '@config/constants'
+import { getFixedGames } from '@utils/game'
+import { zScoreToProb } from '@utils/stats'
 
 export const getBestSeasonPicks = (games: GameData[], outcomes: ResultPoints[][][]): [BestPicks, number] => {
   const [fixedGames, fixedRanks] = getFixedGames(games)

@@ -1,16 +1,19 @@
-import fs from 'fs/promises'
+import { existsSync } from 'fs'
+import { readdir, unlink } from 'fs/promises'
 import path from 'path'
 import { Page } from 'puppeteer'
 
 import { OfpData } from '../@types/ofpData'
-import { AWAY, HOME } from '../config/constants'
-import env, { OfpAccount } from '../config/env'
-import { buildUrl } from '../utils/url'
+import { AWAY, HOME } from '@config/constants'
+import env, { OfpAccount } from '@config/env'
+import { buildUrl } from '@utils/url'
 
 const deleteScreenshots = async (folderPath: string): Promise<void> => {
-  const files = await fs.readdir(folderPath)
+  if (!existsSync(folderPath)) return
+
+  const files = await readdir(folderPath)
   for (const file of files) {
-    await fs.unlink(path.resolve(folderPath, file))
+    await unlink(path.resolve(folderPath, file))
   }
 }
 

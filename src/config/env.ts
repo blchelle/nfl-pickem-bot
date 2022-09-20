@@ -1,9 +1,11 @@
 import dotenv from 'dotenv'
+
 import { GameData, ResultPoints } from '../@types/gameData'
-import { BestPicks } from '../bestPicks'
-import { getBestSeasonPicks } from '../bestSeasonPicks'
-import { getBestWeeklyPicks } from '../bestWeeklyPicks'
-import flags from './flags'
+import { BestPicks } from '@picks/bestPicks'
+import { getBestSeasonPicks } from '@picks/bestSeasonPicks'
+import { getBestWeeklyPicks } from '@picks/bestWeeklyPicks'
+import flags from '@config/flags'
+
 dotenv.config()
 
 interface Env {
@@ -68,7 +70,7 @@ const env: Env = {
   },
   scheduleApi: {
     apiKey: process.env.NFL_SCHEDULE_API_KEY,
-    host: 'https://nfl-schedule.p.rapidapi.com',
+    host: 'nfl-schedule.p.rapidapi.com',
     getScheduleData: process.argv.includes(flags.nflScheduleData.flag)
   }
 }

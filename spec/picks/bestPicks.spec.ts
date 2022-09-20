@@ -1,5 +1,5 @@
-import { ResultPoints } from '../src/@types/gameData'
-import { getBestPicks } from '../src/bestPicks'
+import { ResultPoints } from '../../src/@types/gameData'
+import { getBestPicks } from '@picks/bestPicks'
 
 const testOutcomes: ResultPoints[][][] = [
   [

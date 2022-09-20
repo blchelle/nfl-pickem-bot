@@ -1,4 +1,4 @@
-import { chooseK, possibleScenarios, zScoreToProb } from '../../src/utils/stats'
+import { chooseK, possibleScenarios, zScoreToProb } from '@utils/stats'
 
 describe(chooseK, () => {
   it('works with choose 0', () => {

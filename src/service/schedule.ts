@@ -1,6 +1,6 @@
 import axios, { AxiosRequestConfig } from 'axios'
-import env from './config/env'
-import { buildUrl } from './utils/url'
+import env from '@config/env'
+import { buildUrl } from '@utils/url'
 
 interface NflGame {
   date: string

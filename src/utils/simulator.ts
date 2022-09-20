@@ -1,5 +1,5 @@
-import { GameData, ResultPoints } from './@types/gameData'
-import { MAX_RANK } from './config/constants'
+import { GameData, ResultPoints } from '../@types/gameData'
+import { MAX_RANK } from '@config/constants'
 
 export const simulateWeek = (games: GameData[], outcomes: ResultPoints[][][], picks: Array<[number, number]>, numSimulations = 100_000): void => {
   let meanPoints = 0
