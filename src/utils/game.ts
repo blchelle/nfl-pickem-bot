@@ -1,10 +1,24 @@
-import { GameData, ResultPoints } from '../@types/gameData'
-import { OddsData } from '../@types/oddsData'
-import { OfpData } from '../@types/ofpData'
+import { OddsData } from '@service/odds'
+import { OfpData } from '@webscraper/getData'
 import { GameToPick } from '@picks/bestPicks'
 import { AWAY, HOME, MAX_RANK } from '@config/constants'
 import spreadToWinPercent from '@data/spreadConversion'
 import ofpTeamToOddsApiTeam from '@data/teamConversion'
+
+interface TeamData {
+  name: string
+  pointDist: number
+  winProb: number
+  rank?: number
+};
+
+export type GameData = TeamData[]
+
+export interface ResultPoints {
+  avg: number
+  lose: number
+  win: number
+};
 
 export const calcNetResultPoints = (game: GameData, pick: 0 | 1, rank: number, totalPoints: number): ResultPoints => {
   const pickPoints = game[pick].pointDist * totalPoints

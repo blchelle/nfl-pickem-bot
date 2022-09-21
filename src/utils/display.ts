@@ -1,4 +1,4 @@
-import { GameData, ResultPoints } from '../@types/gameData'
+import { GameData, ResultPoints } from '@utils/game'
 import { BestPicks } from '@picks/bestPicks'
 import { MAX_RANK } from '@config/constants'
 

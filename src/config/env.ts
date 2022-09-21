@@ -1,6 +1,6 @@
 import dotenv from 'dotenv'
 
-import { GameData, ResultPoints } from '../@types/gameData'
+import { GameData, ResultPoints } from '@utils/game'
 import { BestPicks } from '@picks/bestPicks'
 import { getBestSeasonPicks } from '@picks/bestSeasonPicks'
 import { getBestWeeklyPicks } from '@picks/bestWeeklyPicks'

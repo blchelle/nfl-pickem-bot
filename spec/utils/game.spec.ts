@@ -1,7 +1,6 @@
-import { calcNetResultPoints, generateOutcomes, getFixedGames, mergeOfpAndOddsData } from '@utils/game'
-import { GameData, ResultPoints } from '../../src/@types/gameData'
-import { OfpData } from '../../src/@types/ofpData'
-import { OddsData } from '../../src/@types/oddsData'
+import { calcNetResultPoints, generateOutcomes, getFixedGames, mergeOfpAndOddsData, GameData, ResultPoints } from '@utils/game'
+import { OfpData } from '@webscraper/getData'
+import { OddsData } from '@service/odds'
 
 const testGame: GameData = [
   {
