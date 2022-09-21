@@ -1,5 +1,5 @@
 import { displayPicks } from '@utils/display'
-import { GameData, ResultPoints } from '../@types/gameData'
+import { GameData, ResultPoints } from '@utils/game'
 import { BestPicks } from '@picks/bestPicks'
 
 const testGame: GameData[] =

@@ -3,10 +3,18 @@ import { readdir, unlink } from 'fs/promises'
 import path from 'path'
 import { Page } from 'puppeteer'
 
-import { OfpData } from '../@types/ofpData'
 import { AWAY, HOME } from '@config/constants'
 import env, { OfpAccount } from '@config/env'
 import { buildUrl } from '@utils/url'
+
+interface OfpOutcome {
+  team: string
+  pointsPercent: number
+  rank?: number
+  won?: boolean
+}
+
+export type OfpData = OfpOutcome[][]
 
 const deleteScreenshots = async (folderPath: string): Promise<void> => {
   if (!existsSync(folderPath)) return
