@@ -3,7 +3,6 @@
     "target": "es5",
     "module": "commonjs",
     "lib": ["ES6", "DOM"],
-    "sourceMap": true,
     "outDir": "dist",
     "rootDirs": ["src", "spec"],
     "strict": true,
@@ -24,6 +23,9 @@
       "@service/*": ["src/service/*"],
       "@webscraper/*": ["src/webscraper/*"],
       "@utils/*": ["src/utils/*"]
-    }
+    },
+    "plugins": [
+      { "transform": "typescript-transform-paths" }
+    ]
   }
 }
