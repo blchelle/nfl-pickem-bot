@@ -1,194 +1,162 @@
 [
   [
     {
-      "team": "LA Chargers",
-      "pointsPercent": 0.006,
-      "gamePercent": 0.09
-    },
-    {
-      "team": "Kansas City",
-      "pointsPercent": 0.06,
-      "gamePercent": 0.91
-    }
-  ],
-  [
-    {
-      "team": "NY Jets",
-      "pointsPercent": 0,
-      "gamePercent": 0
+      "team": "Pittsburgh",
+      "pointsPercent": 0.006
     },
     {
       "team": "Cleveland",
-      "pointsPercent": 0.076,
-      "gamePercent": 1
-    }
-  ],
-  [
-    {
-      "team": "Washington",
-      "pointsPercent": 0.01,
-      "gamePercent": 0.266
-    },
-    {
-      "team": "Detroit",
-      "pointsPercent": 0.027000000000000003,
-      "gamePercent": 0.7340000000000001
-    }
-  ],
-  [
-    {
-      "team": "Tampa Bay",
-      "pointsPercent": 0.036000000000000004,
-      "gamePercent": 0.8370000000000001
-    },
-    {
-      "team": "New Orleans",
-      "pointsPercent": 0.006999999999999999,
-      "gamePercent": 0.163
-    }
-  ],
-  [
-    {
-      "team": "Carolina",
-      "pointsPercent": 0.013000000000000001,
-      "gamePercent": 0.39
-    },
-    {
-      "team": "NY Giants",
-      "pointsPercent": 0.02,
-      "gamePercent": 0.61
-    }
-  ],
-  [
-    {
-      "team": "New England",
-      "pointsPercent": 0.013000000000000001,
-      "gamePercent": 0.375
-    },
-    {
-      "team": "Pittsburgh",
-      "pointsPercent": 0.022000000000000002,
-      "gamePercent": 0.625
-    }
-  ],
-  [
-    {
-      "team": "Indianapolis",
-      "pointsPercent": 0.062,
-      "gamePercent": 0.9540000000000001
-    },
-    {
-      "team": "Jacksonville",
-      "pointsPercent": 0.003,
-      "gamePercent": 0.046
-    }
-  ],
-  [
-    {
-      "team": "Miami",
-      "pointsPercent": 0.009000000000000001,
-      "gamePercent": 0.21100000000000002
-    },
-    {
-      "team": "Baltimore",
-      "pointsPercent": 0.035,
-      "gamePercent": 0.789
-    }
-  ],
-  [
-    {
-      "team": "Atlanta",
-      "pointsPercent": 0.001,
-      "gamePercent": 0.013999999999999999
-    },
-    {
-      "team": "LA Rams",
-      "pointsPercent": 0.092,
-      "gamePercent": 0.986
-    }
-  ],
-  [
-    {
-      "team": "Seattle",
-      "pointsPercent": 0.005,
-      "gamePercent": 0.07200000000000001
-    },
-    {
-      "team": "San Francisco",
-      "pointsPercent": 0.064,
-      "gamePercent": 0.9279999999999999
-    }
-  ],
-  [
-    {
-      "team": "Cincinnati",
-      "pointsPercent": 0.07200000000000001,
-      "gamePercent": 0.986
-    },
-    {
-      "team": "Dallas",
-      "pointsPercent": 0.001,
-      "gamePercent": 0.013999999999999999
+      "pointsPercent": 0.05
     }
   ],
   [
     {
       "team": "Houston",
-      "pointsPercent": 0,
-      "gamePercent": 0
+      "pointsPercent": 0.005
+    },
+    {
+      "team": "Chicago",
+      "pointsPercent": 0.04
+    }
+  ],
+  [
+    {
+      "team": "Las Vegas",
+      "pointsPercent": 0.033
+    },
+    {
+      "team": "Tennessee",
+      "pointsPercent": 0.011000000000000001
+    }
+  ],
+  [
+    {
+      "team": "Kansas City",
+      "pointsPercent": 0.099
+    },
+    {
+      "team": "Indianapolis",
+      "pointsPercent": 0.003
+    }
+  ],
+  [
+    {
+      "team": "Buffalo",
+      "pointsPercent": 0.084
+    },
+    {
+      "team": "Miami",
+      "pointsPercent": 0.002
+    }
+  ],
+  [
+    {
+      "team": "Detroit",
+      "pointsPercent": 0.003
+    },
+    {
+      "team": "Minnesota",
+      "pointsPercent": 0.068
+    }
+  ],
+  [
+    {
+      "team": "Baltimore",
+      "pointsPercent": 0.055
+    },
+    {
+      "team": "New England",
+      "pointsPercent": 0.005
+    }
+  ],
+  [
+    {
+      "team": "Cincinnati",
+      "pointsPercent": 0.075
+    },
+    {
+      "team": "NY Jets",
+      "pointsPercent": 0.001
+    }
+  ],
+  [
+    {
+      "team": "Philadelphia",
+      "pointsPercent": 0.08900000000000001
+    },
+    {
+      "team": "Washington",
+      "pointsPercent": 0.001
+    }
+  ],
+  [
+    {
+      "team": "New Orleans",
+      "pointsPercent": 0.044000000000000004
+    },
+    {
+      "team": "Carolina",
+      "pointsPercent": 0.008
+    }
+  ],
+  [
+    {
+      "team": "Jacksonville",
+      "pointsPercent": 0.001
+    },
+    {
+      "team": "LA Chargers",
+      "pointsPercent": 0.099
+    }
+  ],
+  [
+    {
+      "team": "LA Rams",
+      "pointsPercent": 0.059000000000000004
+    },
+    {
+      "team": "Arizona",
+      "pointsPercent": 0.003
+    }
+  ],
+  [
+    {
+      "team": "Atlanta",
+      "pointsPercent": 0.008
+    },
+    {
+      "team": "Seattle",
+      "pointsPercent": 0.033
+    }
+  ],
+  [
+    {
+      "team": "Green Bay",
+      "pointsPercent": 0.009000000000000001
+    },
+    {
+      "team": "Tampa Bay",
+      "pointsPercent": 0.025
+    }
+  ],
+  [
+    {
+      "team": "San Francisco",
+      "pointsPercent": 0.025
     },
     {
       "team": "Denver",
-      "pointsPercent": 0.092,
-      "gamePercent": 1
+      "pointsPercent": 0.018000000000000002
     }
   ],
   [
     {
-      "team": "Arizona",
-      "pointsPercent": 0.004,
-      "gamePercent": 0.06
+      "team": "Dallas",
+      "pointsPercent": 0.006999999999999999
     },
     {
-      "team": "Las Vegas",
-      "pointsPercent": 0.063,
-      "gamePercent": 0.94
-    }
-  ],
-  [
-    {
-      "team": "Chicago",
-      "pointsPercent": 0.003,
-      "gamePercent": 0.04
-    },
-    {
-      "team": "Green Bay",
-      "pointsPercent": 0.07200000000000001,
-      "gamePercent": 0.96
-    }
-  ],
-  [
-    {
-      "team": "Tennessee",
-      "pointsPercent": 0,
-      "gamePercent": 0
-    },
-    {
-      "team": "Buffalo",
-      "pointsPercent": 0.1,
-      "gamePercent": 1
-    }
-  ],
-  [
-    {
-      "team": "Minnesota",
-      "pointsPercent": 0.017,
-      "gamePercent": 0.531
-    },
-    {
-      "team": "Philadelphia",
-      "pointsPercent": 0.015,
-      "gamePercent": 0.469
+      "team": "NY Giants",
+      "pointsPercent": 0.032
     }
   ]
 ]
