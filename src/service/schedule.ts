@@ -21,7 +21,7 @@ export const getDailyFirstGames = (games: ScheduleData): Date[] => {
   const dailyFirstGames = futureGameTimes.filter((gameTime, i) => i === 0 || futureGameTimes[i - 1].getDay() !== gameTime.getDay())
 
   // Schedule the bots to run a few minutes before game time since execution can take a couple minutes
-  dailyFirstGames.forEach((gameTime) => { gameTime.setMinutes(gameTime.getMinutes() - 10) })
+  dailyFirstGames.forEach((gameTime) => { gameTime.setMinutes(gameTime.getMinutes() - 5) })
   return dailyFirstGames
 }
 
