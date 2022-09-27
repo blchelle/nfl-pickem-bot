@@ -11,13 +11,14 @@ export interface ScheduleData {
 }
 
 const MONDAY = 1
+const TUESDAY = 2
 
 export const getDailyFirstGames = (games: ScheduleData): Date[] => {
   const gameTimes = games.data.map(({ date }) => new Date(date))
 
   // Filter down the list to times that are in the future but not on Monday because the picks always lock on Sunday
   // Then, filter down further to the first game times of each day of the week
-  const futureGameTimes = gameTimes.filter((gameTime) => gameTime.getTime() > new Date().getTime() && gameTime.getDay() !== MONDAY)
+  const futureGameTimes = gameTimes.filter((gameTime) => gameTime.getTime() > new Date().getTime() && gameTime.getDay() !== MONDAY && gameTime.getDay() !== TUESDAY)
   const dailyFirstGames = futureGameTimes.filter((gameTime, i) => i === 0 || futureGameTimes[i - 1].getDay() !== gameTime.getDay())
 
   // Schedule the bots to run a few minutes before game time since execution can take a couple minutes
