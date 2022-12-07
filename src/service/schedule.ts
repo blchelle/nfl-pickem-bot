@@ -1,34 +1,36 @@
-import axios, { AxiosRequestConfig } from 'axios'
+import axios from 'axios'
 import env from '@config/env'
 import { buildUrl } from '@utils/url'
 
-interface NflGame {
+export interface ScheduleData {
+  events: ScheduleAPIEvents[]
+}
+
+interface ScheduleAPIEvents {
   date: string
 }
 
-export interface ScheduleData {
-  data: NflGame[]
-}
+// GetPickTimes should return a list of unique dates occuring before the morning wave of sunday games.
+export const getPickTimes = (games: ScheduleData): Date[] => {
+  const gameTimes = games.events.map((e) => new Date(e.date))
 
-const MONDAY = 1
-const TUESDAY = 2
-
-export const getDailyFirstGames = (games: ScheduleData): Date[] => {
-  const gameTimes = games.data.map(({ date }) => new Date(date))
+  // The morning wave of Sunday games starts at T18:00 UTC
+  // This is when the picks lock
+  const finalLockTime = new Date()
+  finalLockTime.setDate(finalLockTime.getDate() + (-1 - finalLockTime.getDay() + 7) % 7 + 1)
+  finalLockTime.setUTCHours(18, 0, 0, 0)
 
   // Filter down the list to times that are in the future but not on Monday because the picks always lock on Sunday
   // Then, filter down further to the first game times of each day of the week
-  const futureGameTimes = gameTimes.filter((gameTime) => gameTime.getTime() > new Date().getTime() && gameTime.getDay() !== MONDAY && gameTime.getDay() !== TUESDAY)
-  const dailyFirstGames = futureGameTimes.filter((gameTime, i) => i === 0 || futureGameTimes[i - 1].getDay() !== gameTime.getDay())
+  const pickLockTimes = gameTimes.filter((gameTime) => gameTime.getTime() > new Date().getTime() && gameTime.getTime() <= finalLockTime.getTime())
 
-  // Schedule the bots to run a few minutes before game time since execution can take a couple minutes
-  dailyFirstGames.forEach((gameTime) => { gameTime.setMinutes(gameTime.getMinutes() - 5) })
-  return dailyFirstGames
+  // Offset the run times by 5 minutes to give the bots a chance to run
+  // Also eliminate duplicate times
+  pickLockTimes.forEach((gameTime) => { gameTime.setMinutes(gameTime.getMinutes() - 5) })
+  return pickLockTimes.filter((date, i, self) => self.findIndex((d) => d.getTime() === date.getTime()) === i)
 }
 
 export const getNflGamesThisWeek = async (): Promise<ScheduleData> => {
-  if (env.scheduleApi.apiKey === undefined) throw new Error('NFL Schedule API Key is missing')
-
-  const reqOptions: AxiosRequestConfig = { headers: { 'X-RapidAPI-Key': env.scheduleApi.apiKey, 'X-RapidAPI-Host': env.scheduleApi.host } }
-  return (await axios.get(buildUrl(env.scheduleApi.host, 'v1/schedules'), reqOptions)).data
+  const res: ScheduleData = (await axios.get(buildUrl(env.scheduleApi.host, 'apis/site/v2/sports/football/nfl/scoreboard'))).data
+  return res
 }

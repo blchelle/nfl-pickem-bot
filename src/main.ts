@@ -7,7 +7,7 @@ import TEST_ODDS_DATA_JSON from '@data/testOddsData.json'
 import TEST_OFP_DATA_JSON from '@data/testOfficeFootballPoolData.json'
 import TEST_SCHEDULE_DATA_JSON from '@data/testScheduleData.json'
 import { getOddsData, OddsData } from '@service/odds'
-import { getDailyFirstGames, getNflGamesThisWeek, ScheduleData } from '@service/schedule'
+import { getPickTimes, getNflGamesThisWeek, ScheduleData } from '@service/schedule'
 import { generateOutcomes, mergeOfpAndOddsData } from '@utils/game'
 import { displayPicks } from '@utils/display'
 import { simulateWeek } from '@utils/simulator'
@@ -28,7 +28,7 @@ const showInstructions = (): void => {
 const scheduler = async (): Promise<void> => {
   while (true) {
     const gameSchedule = env.scheduleApi.getScheduleData ? await getNflGamesThisWeek() : TEST_SCHEDULE_DATA
-    const execSchedule = getDailyFirstGames(gameSchedule)
+    const execSchedule = getPickTimes(gameSchedule)
 
     while (execSchedule.length > 0) {
       const [nextExecTime] = execSchedule.splice(0, 1)
