@@ -36,7 +36,6 @@ export interface OfpAccount {
 }
 
 interface ScheduleEnv {
-  apiKey?: string
   host: string
   getScheduleData: boolean
 }
@@ -69,8 +68,7 @@ const env: Env = {
     ]
   },
   scheduleApi: {
-    apiKey: process.env.NFL_SCHEDULE_API_KEY,
-    host: 'nfl-schedule.p.rapidapi.com',
+    host: 'site.api.espn.com',
     getScheduleData: process.argv.includes(flags.nflScheduleData.flag)
   }
 }
