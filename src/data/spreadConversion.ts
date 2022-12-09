@@ -37,11 +37,11 @@ const SPREAD_TO_PROB: SpreadToProbMap = {
   15.5: 0.963,
   16: 0.981,
   16.5: 0.998,
-  17: 1
+  17: 0.999
 }
 
 const spreadToWinPercent = (spread: number): number => {
-  const favoriteWinChance = SPREAD_TO_PROB[Math.abs(spread)] ?? 1
+  const favoriteWinChance = SPREAD_TO_PROB[Math.abs(spread)] ?? 0.999
   return spread < 0 ? favoriteWinChance : 1 - favoriteWinChance
 }
 

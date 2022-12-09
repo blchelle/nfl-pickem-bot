@@ -6,18 +6,18 @@ describe(spreadToWinPercent, () => {
   })
 
   it('gives a 0 win chance when spread is 17', () => {
-    expect(spreadToWinPercent(17)).toBe(0)
+    expect(spreadToWinPercent(17)).toBeCloseTo(0.001)
   })
 
   it('gives a 0 win chance when spread is greater than 17', () => {
-    expect(spreadToWinPercent(20)).toBe(0)
+    expect(spreadToWinPercent(20)).toBeCloseTo(0.001)
   })
 
   it('gives a 1 win chance when spread is -17', () => {
-    expect(spreadToWinPercent(-17)).toBe(1)
+    expect(spreadToWinPercent(-17)).toBeCloseTo(0.999)
   })
 
   it('gives a 1 win chance when spread is less than -17', () => {
-    expect(spreadToWinPercent(-20)).toBe(1)
+    expect(spreadToWinPercent(-20)).toBeCloseTo(0.999)
   })
 })
