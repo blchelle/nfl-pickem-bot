@@ -72,8 +72,8 @@ const executeBots = async (): Promise<void> => {
     const outcomes = generateOutcomes(games)
 
     // The season bot and the weekly bot have different methods of choosing their picks
-    const [picks, weeklyWinProb] = bot.getBestPicksFn(games, outcomes)
-    displayPicks(games, outcomes, picks, weeklyWinProb)
+    const [picks, expectedPayout, winProbs] = bot.getBestPicksFn(games, outcomes)
+    displayPicks(games, outcomes, picks, expectedPayout, winProbs)
     simulateWeek(games, outcomes, picks.picks)
 
     if (page !== undefined && env.ofp.makePicks) await makePicks(page, picks.picks)

@@ -27,6 +27,6 @@ describe(getBestSeasonPicks, () => {
     const [picks, winChance] = getBestSeasonPicks(testGames, testOutcomes)
 
     expect(picks).toStrictEqual({ net: 4, picks: [[0, 16]] })
-    expect(winChance).toBeCloseTo(0.073)
+    expect(winChance).toBeCloseTo(0.863)
   })
 })

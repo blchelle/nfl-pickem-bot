@@ -32,7 +32,7 @@ export interface OfpAccount {
   name: string
   email?: string
   password?: string
-  getBestPicksFn: (games: GameData[], outcomes: ResultPoints[][][]) => [BestPicks, number]
+  getBestPicksFn: (games: GameData[], outcomes: ResultPoints[][][]) => [BestPicks, number, number[]]
 }
 
 interface ScheduleEnv {

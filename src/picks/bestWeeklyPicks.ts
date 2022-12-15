@@ -2,22 +2,26 @@ import cliProgress from 'cli-progress'
 
 import { getFixedGames, GameData, ResultPoints } from '@utils/game'
 import { BestPicks, GameToPick, getBestPicks } from '@picks/bestPicks'
-import { AVG_STANDARD_DEVIATION, MAX_RANK, NET_TARGET } from '@config/constants'
-import { chooseK, possibleScenarios, zScoreToProb } from '@utils/stats'
+import { MAX_RANK } from '@config/constants'
+import { chooseK, getExpectedPayout, getWeeklyStats, possibleScenarios } from '@utils/stats'
+import weeklyData from '@data/historicalWeeklyData.json'
 
 interface BestProb {
-  prob: number
+  payout: number
   scenarioProb: number
-  winProb: number
+  winProbs: number[]
   net: number
   games: number[]
   picks: BestPicks
 }
 
-export const getBestWeeklyPicks = (games: GameData[], outcomes: ResultPoints[][][]): [BestPicks, number] => {
+export const getBestWeeklyPicks = (games: GameData[], outcomes: ResultPoints[][][]): [BestPicks, number, number[]] => {
   const [fixedGames, fixedRanks] = getFixedGames(games)
   const ranksLeft = new Array(games.length).fill(null).map((_, i) => MAX_RANK - i).filter((rank) => !fixedRanks.has(rank))
   const gameIndexes = new Array(games.length).fill(null).map((_, i) => i).filter((i) => fixedGames[i] === undefined)
+
+  const historicalWeeklyScores = weeklyData.map((week) => week.scores)
+  const historicalStats = getWeeklyStats(historicalWeeklyScores)
 
   let totalIterations = 0
   const combinations = []
@@ -31,8 +35,8 @@ export const getBestWeeklyPicks = (games: GameData[], outcomes: ResultPoints[][]
   loadingBar.start(totalIterations, 0)
   let progress = 0
 
-  // Find the best combination, pick combo that maximizes win percentage
-  const bestProb: BestProb = { prob: 0, net: Number.MIN_SAFE_INTEGER, games: [], picks: { net: Number.MIN_SAFE_INTEGER, picks: [] }, scenarioProb: 0, winProb: 0 }
+  // Find the best combination, pick combo that maximizes expected money
+  const bestProb: BestProb = { payout: 0, net: Number.MIN_SAFE_INTEGER, games: [], picks: { net: Number.MIN_SAFE_INTEGER, picks: [] }, scenarioProb: 0, winProbs: [] }
   for (let i = 0; i < combinations.length; i++) {
     const gameCombination = combinations[i]
     const allScenarios = possibleScenarios(gameCombination.length)
@@ -41,31 +45,22 @@ export const getBestWeeklyPicks = (games: GameData[], outcomes: ResultPoints[][]
       loadingBar.update(progress++)
       const scenario = allScenarios[j]
 
-      let probability = 1
+      let scenarioProb = 1
       for (let k = 0; k < scenario.length; k++) {
-        probability *= games[gameCombination[k]][scenario[k]].winProb
+        scenarioProb *= games[gameCombination[k]][scenario[k]].winProb
       }
-
-      if (probability < bestProb.prob) continue
 
       const fixed: GameToPick = gameCombination.reduce((acc: GameToPick, curr, i) => ({ ...acc, [curr]: { pick: scenario[i], rank: ranksLeft[i], won: 1 } }), fixedGames)
       const ranksTaken: Set<number> = new Set(Object.values(fixed).map(({ rank }) => rank))
       const result = getBestPicks(outcomes, 0, fixed, ranksTaken)
+      const [expectedPayout, winProbs] = getExpectedPayout(historicalStats, scenarioProb, result.net)
 
-      const targetDiff = result.net - NET_TARGET
-      const zScore = targetDiff / AVG_STANDARD_DEVIATION
-      const winProb = zScoreToProb(zScore)
-      const scenarioProb = probability
-
-      probability *= winProb
-
-      if (probability > bestProb.prob) {
-        bestProb.prob = probability
-        bestProb.scenarioProb = scenarioProb
-        bestProb.winProb = winProb
+      if (expectedPayout > bestProb.payout) {
+        bestProb.payout = expectedPayout
         bestProb.games = gameCombination
         bestProb.picks = result
         bestProb.net = result.net
+        bestProb.winProbs = winProbs
       }
     }
   }
@@ -73,5 +68,5 @@ export const getBestWeeklyPicks = (games: GameData[], outcomes: ResultPoints[][]
   loadingBar.update(progress++)
   loadingBar.stop()
 
-  return [bestProb.picks, bestProb.prob]
+  return [bestProb.picks, bestProb.payout, bestProb.winProbs]
 }
