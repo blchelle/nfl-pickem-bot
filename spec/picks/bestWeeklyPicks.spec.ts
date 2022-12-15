@@ -39,6 +39,6 @@ describe(getBestWeeklyPicks, () => {
     const [picks, winChance] = getBestWeeklyPicks(testGames, testOutcomes)
 
     expect(picks).toStrictEqual({ net: 11.98, picks: [[1, 16], [1, 15]] })
-    expect(winChance).toBeCloseTo(0.072)
+    expect(winChance).toBeCloseTo(2.80)
   })
 })

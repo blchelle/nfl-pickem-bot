@@ -2,7 +2,7 @@ import { GameData, ResultPoints } from '@utils/game'
 import { BestPicks } from '@picks/bestPicks'
 import { MAX_RANK } from '@config/constants'
 
-export const displayPicks = (gamesData: GameData[], pointsData: ResultPoints[][][], results: BestPicks, winProb?: number): void => {
+export const displayPicks = (gamesData: GameData[], pointsData: ResultPoints[][][], results: BestPicks, expectedPayout: number, winProbs: number[]): void => {
   results.picks.forEach(([pick, rank], i) => {
     const pointData = pointsData[i][MAX_RANK - rank][pick]
     const pointsAvg = pointData.avg.toFixed(2)
@@ -23,6 +23,13 @@ export const displayPicks = (gamesData: GameData[], pointsData: ResultPoints[][]
     console.log(tableRow)
   })
 
-  console.log(`\nNet Points Gained: ${results.net.toFixed(3)}`)
-  if (winProb !== undefined) console.log(`Win Probability: ${winProb.toFixed(3)}`)
+  console.log('')
+  console.log(`Net Points Gained: ${results.net.toFixed(2)}`)
+  console.log('')
+  console.log(`First Place Probability: ${winProbs[0].toFixed(4)}`)
+  console.log(`Second Place Probability: ${winProbs[1].toFixed(4)}`)
+  console.log(`Third Place Probability: ${winProbs[2].toFixed(4)}`)
+  console.log('')
+  console.log(`Expected Payout: $${expectedPayout.toFixed(2)}`)
+  console.log('')
 }

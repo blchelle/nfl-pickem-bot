@@ -22,25 +22,20 @@ const testOutcomes: ResultPoints[][][] = [
 const testPicks: BestPicks = { net: -2, picks: [[0, 16]] }
 
 describe(displayPicks, () => {
-  it('displays picks and net points', () => {
+  it('displays net points, expected payout, win probability', () => {
     let output = ''
     jest.spyOn(console, 'log').mockImplementation((log: string) => { output += log ?? '\n' })
 
-    displayPicks(testGame, testOutcomes, testPicks)
-    const expected = '     Away Team over Home Team          16 confidence     Win:    8.00     Loss:   -3.00     Net:    4.00\n' +
-                     'Net Points Gained: -2.000'
-
-    expect(output).toBe(expected)
-  })
-
-  it('displays win percentage, if given', () => {
-    let output = ''
-    jest.spyOn(console, 'log').mockImplementation((log: string) => { output += log ?? '\n' })
-
-    displayPicks(testGame, testOutcomes, testPicks, 0.5)
-    const expected = '     Away Team over Home Team          16 confidence     Win:    8.00     Loss:   -3.00     Net:    4.00\n' +
-                    'Net Points Gained: -2.000' +
-                    'Win Probability: 0.500'
+    displayPicks(testGame, testOutcomes, testPicks, 2.45, [0.01, 0.02, 0.03])
+    const expected = '     Away Team over Home Team          16 confidence     Win:    8.00     Loss:   -3.00     Net:    4.00' +
+                    '' +
+                    'Net Points Gained: -2.00' +
+                    '' +
+                    'First Place Probability: 0.0100' +
+                    'Second Place Probability: 0.0200' +
+                    'Third Place Probability: 0.0300' +
+                    '' +
+                    'Expected Payout: $2.45'
 
     expect(output).toBe(expected)
   })
