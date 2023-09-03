@@ -1,4 +1,4 @@
-import { ElementHandle, Page } from 'puppeteer'
+import { ElementHandle, Page, TimeoutError } from 'puppeteer'
 import { AWAY, HOME } from '@config/constants'
 import env from '@config/env'
 import { buildUrl } from '@utils/url'
@@ -18,7 +18,9 @@ interface GameInputs {
 const enterMnfTotalPoints = async (page: Page): Promise<void> => {
   const mnfProjectionSelector = '#submitRowGuts > div > span'
   await page.waitForSelector(mnfProjectionSelector)
-  const projectedMnfPoints = await page.$eval(mnfProjectionSelector, (el) => el.innerHTML.split(/\(|\)/)[1])
+
+  let projectedMnfPoints = +(await page.$eval(mnfProjectionSelector, (el) => el.innerHTML.split(/\(|\)/)[1]))
+  projectedMnfPoints = Math.max(projectedMnfPoints, 10)
 
   const mnfInputSelector = 'input.mnf'
   const mnfInput = await page.waitForSelector(mnfInputSelector)
@@ -26,7 +28,7 @@ const enterMnfTotalPoints = async (page: Page): Promise<void> => {
 
   // Clicking 3 times allows us to overwrite any existing text
   await mnfInput.click({ clickCount: 3 })
-  await mnfInput.type(projectedMnfPoints)
+  await mnfInput.type(projectedMnfPoints.toString())
 }
 
 /**
@@ -75,6 +77,20 @@ const pickGame = async (page: Page, gameInputs: GameInputs, pick: number[]): Pro
 
   // Only click the button if it hasn't been previously selected from a prior session
   if (!await elementHandleHasClass(buttons[teamPicked], 'btn-pickable-saved')) await simulateClick(buttons[teamPicked], 'Space')
+
+  // Check if the "Underdog Warning" modal popped up. Close it if it did.
+  try {
+    const closeModalButton = await page.waitForSelector('#alertModal .modal-footer button', { timeout: 3000 })
+
+    // Clicks the button to close the modal and waits for the modal to dissapear
+    if (closeModalButton !== null) await simulateClick(closeModalButton, 'Enter')
+    await page.waitForFunction(() => document.querySelector('#alertModal') === null)
+  } catch (err) {
+    if (!(err instanceof TimeoutError)) {
+      console.log('An non-timeout error occurred: ', err)
+      throw err
+    }
+  }
 
   // Clicking the rank picker will show a dropdown
   await page.waitForFunction((rankPickerEl) => !Array.from(rankPickerEl.classList).includes('btn-locked'), {}, rankPicker)

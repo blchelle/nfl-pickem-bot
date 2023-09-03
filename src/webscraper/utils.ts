@@ -31,7 +31,6 @@ export const findElementWithInnerHTML = async (els: ElementHandle[], innerHTML: 
  * This method of clicking is more consistent that using ElementHandle.click()
  * because it works even when the element is outside the viewport.
  *
- *
  * @param el the puppeteer.ElementHandle to simulate the click on
  * @param trigger the input to press once the element is focused
  */

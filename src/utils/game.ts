@@ -2,14 +2,15 @@ import { OddsData } from '@service/odds'
 import { OfpData } from '@webscraper/getData'
 import { GameToPick } from '@picks/bestPicks'
 import { AWAY, HOME, MAX_RANK } from '@config/constants'
-import spreadToWinPercent from '@data/spreadConversion'
 import ofpTeamToOddsApiTeam from '@data/teamConversion'
+import noVigOdds from '@data/moneylineConversion'
 
 interface TeamData {
   name: string
   pointDist: number
   winProb: number
   rank?: number
+  locked: boolean // Whether the pick has been locked
 };
 
 export type GameData = TeamData[]
@@ -37,10 +38,10 @@ export const mergeOfpAndOddsData = (ofpGames: OfpData, oddsGames: OddsData): Gam
     const home = game[HOME]
 
     // Some games have happened in the past (ie TNF), these games won't have odds
-    if (away.won !== undefined && home.won !== undefined) {
+    if (away.state === 'won' || home.state === 'won') {
       return [
-        { name: away.team, pointDist: +away.pointsPercent.toFixed(3), winProb: +away.won, rank: away.rank },
-        { name: home.team, pointDist: +home.pointsPercent.toFixed(3), winProb: +home.won, rank: home.rank }
+        { name: away.team, pointDist: +away.pointsPercent.toFixed(3), winProb: away.state === 'won' ? 1 : 0, rank: away.rank, locked: true },
+        { name: home.team, pointDist: +home.pointsPercent.toFixed(3), winProb: home.state === 'won' ? 1 : 0, rank: home.rank, locked: true }
       ]
     }
 
@@ -53,20 +54,43 @@ export const mergeOfpAndOddsData = (ofpGames: OfpData, oddsGames: OddsData): Gam
       throw new Error(`could not find a matching game for ${away.team} at ${home.team}`)
     }
 
-    const spreads = matchingGame.bookmakers[0].markets[0].outcomes
-    const awaySpreadIndex = ofpTeamToOddsApiTeam(away.team) === spreads[0].name.toLowerCase() ? 0 : 1
+    const mlPrices = matchingGame.bookmakers[0].markets[0].outcomes
+    const awaySpreadIndex = ofpTeamToOddsApiTeam(away.team) === mlPrices[0].name.toLowerCase() ? 0 : 1
     const homeSpreadIndex = 1 - awaySpreadIndex
+
+    const [homeWinProb, awayWinProb] = noVigOdds(mlPrices[homeSpreadIndex].price, mlPrices[awaySpreadIndex].price)
+
+    if (away.state === 'in progress' || home.state === 'in progress') {
+      return [
+        {
+          name: away.team,
+          pointDist: +away.pointsPercent.toFixed(3),
+          winProb: +awayWinProb.toFixed(3),
+          rank: away.rank,
+          locked: true
+        },
+        {
+          name: home.team,
+          pointDist: +home.pointsPercent.toFixed(3),
+          winProb: +homeWinProb.toFixed(3),
+          rank: home.rank,
+          locked: true
+        }
+      ]
+    }
 
     return [
       {
         name: away.team,
         pointDist: +away.pointsPercent.toFixed(3),
-        winProb: +spreadToWinPercent(spreads[awaySpreadIndex].point).toFixed(3)
+        winProb: +awayWinProb.toFixed(3),
+        locked: false
       },
       {
         name: home.team,
         pointDist: +home.pointsPercent.toFixed(3),
-        winProb: +spreadToWinPercent(spreads[homeSpreadIndex].point).toFixed(3)
+        winProb: +homeWinProb.toFixed(3),
+        locked: false
       }
     ]
   })
@@ -74,7 +98,7 @@ export const mergeOfpAndOddsData = (ofpGames: OfpData, oddsGames: OddsData): Gam
 
 export const getFixedGames = (games: GameData[]): [GameToPick, Set<number>] => {
   const fixedGames = games.reduce<GameToPick>((acc, game, i) => {
-    if (Math.abs(game[AWAY].winProb - game[HOME].winProb) !== 1) return acc
+    if (!game[AWAY].locked && !game[HOME].locked) return acc
 
     const pickedTeam = game[AWAY].rank !== undefined ? AWAY : HOME
     return { ...acc, [i]: { pick: pickedTeam, rank: game[pickedTeam].rank ?? -1, won: game[pickedTeam].winProb } }

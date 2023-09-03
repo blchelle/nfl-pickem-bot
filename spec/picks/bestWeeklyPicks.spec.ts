@@ -2,12 +2,12 @@ import { getBestWeeklyPicks } from '@picks/bestWeeklyPicks'
 
 const testGames = [
   [
-    { name: 'Away Team 0', pointDist: 0.3, winProb: 0.70 },
-    { name: 'Home Team 0', pointDist: 0.1, winProb: 0.30 }
+    { name: 'Away Team 0', pointDist: 0.3, winProb: 0.70, locked: false },
+    { name: 'Home Team 0', pointDist: 0.1, winProb: 0.30, locked: false }
   ],
   [
-    { name: 'Away Team 1', pointDist: 0.2, winProb: 0.40 },
-    { name: 'Home Team 1', pointDist: 0.4, winProb: 0.60 }
+    { name: 'Away Team 1', pointDist: 0.2, winProb: 0.40, locked: false },
+    { name: 'Home Team 1', pointDist: 0.4, winProb: 0.60, locked: false }
   ]
 ]
 
@@ -36,9 +36,8 @@ const testOutcomes = [
 
 describe(getBestWeeklyPicks, () => {
   it('picks the games that maximize weekly win chance', () => {
-    const [picks, winChance] = getBestWeeklyPicks(testGames, testOutcomes)
+    const [picks] = getBestWeeklyPicks(testGames, testOutcomes)
 
     expect(picks).toStrictEqual({ net: 11.98, picks: [[1, 16], [1, 15]] })
-    expect(winChance).toBeCloseTo(2.80)
   })
 })

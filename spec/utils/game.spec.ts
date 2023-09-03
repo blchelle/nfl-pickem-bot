@@ -6,12 +6,14 @@ const testGame: GameData = [
   {
     name: 'Away Team',
     pointDist: 0.01,
-    winProb: 0.25
+    winProb: 0.25,
+    locked: false
   },
   {
     name: 'Home Team',
     pointDist: 0.02,
-    winProb: 0.75
+    winProb: 0.75,
+    locked: false
   }
 ]
 
@@ -43,8 +45,8 @@ const testOddsData: OddsData = [
         markets: [
           {
             outcomes: [
-              { name: 'Los Angeles Rams', point: -7 },
-              { name: 'New York Jets', point: 7 }
+              { name: 'Los Angeles Rams', price: 1.7 },
+              { name: 'New York Jets', price: 2.16 }
             ]
           }
         ]
@@ -59,8 +61,8 @@ describe(mergeOfpAndOddsData, () => {
   beforeEach(() => {
     expected = [
       [
-        { name: 'la rams', pointDist: 0.03, winProb: 0.752 },
-        { name: 'ny jets', pointDist: 0.03, winProb: 0.248 }
+        { name: 'la rams', pointDist: 0.03, winProb: 0.56, locked: false },
+        { name: 'ny jets', pointDist: 0.03, winProb: 0.44, locked: false }
       ]
     ]
   })
@@ -102,12 +104,12 @@ let testGames: GameData[] = []
 beforeEach(() => {
   testGames = [
     [
-      { name: 'Away Team 0', pointDist: 0.3, winProb: 0.70 },
-      { name: 'Home Team 0', pointDist: 0.1, winProb: 0.30 }
+      { name: 'Away Team 0', pointDist: 0.3, winProb: 0.70, locked: false },
+      { name: 'Home Team 0', pointDist: 0.1, winProb: 0.30, locked: false }
     ],
     [
-      { name: 'Away Team 1', pointDist: 0.2, winProb: 0.40 },
-      { name: 'Home Team 1', pointDist: 0.4, winProb: 0.60 }
+      { name: 'Away Team 1', pointDist: 0.2, winProb: 0.40, locked: false },
+      { name: 'Home Team 1', pointDist: 0.4, winProb: 0.60, locked: false }
     ]
   ]
 })
@@ -121,6 +123,8 @@ describe(getFixedGames, () => {
     testGames[0][0].rank = 5
     testGames[0][0].winProb = 0
     testGames[0][1].winProb = 1
+    testGames[0][1].locked = true
+    testGames[0][0].locked = true
 
     expect(getFixedGames(testGames)).toStrictEqual([{ 0: { rank: 5, won: 0, pick: 0 } }, new Set([5])])
   })

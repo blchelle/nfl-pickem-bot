@@ -4,7 +4,7 @@ import { buildUrl } from '@utils/url'
 
 interface OutcomeData {
   name: string
-  point: number
+  price: number
 }
 
 interface MarketData {
@@ -29,7 +29,7 @@ export const getOddsData = async (): Promise<OddsData> => {
   const oddsApiUrl = buildUrl(
     env.oddsApi.host,
     '/v4/sports/americanfootball_nfl/odds',
-    { regions: 'us', markets: 'spreads', oddsFormat: 'american', apiKey: env.oddsApi.apiKey }
+    { bookmakers: 'betonlineag', markets: 'h2h', oddsFormat: 'decimal', apiKey: env.oddsApi.apiKey }
   )
   return (await axios.get(oddsApiUrl)).data
 }
