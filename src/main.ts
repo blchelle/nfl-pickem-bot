@@ -1,4 +1,5 @@
 import puppeteer, { Browser } from 'puppeteer'
+import UserAgent from 'user-agents'
 
 import { MS_PER_DAY, MS_PER_HOUR, MS_PER_MINUTE, MS_PER_SECOND } from '@config/constants'
 import env from '@config/env'
@@ -67,6 +68,9 @@ const executeBots = async (): Promise<void> => {
     }
 
     const page = browser !== undefined ? await browser.newPage() : undefined
+    const userAgent = new UserAgent()
+    await page?.setUserAgent(userAgent.random().toString())
+
     const ofpData = page !== undefined ? await getOfpData(page, bot) : TEST_OFP_DATA
     const games = mergeOfpAndOddsData(ofpData, oddsData)
     const outcomes = generateOutcomes(games)
@@ -76,7 +80,9 @@ const executeBots = async (): Promise<void> => {
     displayPicks(games, outcomes, picks, expectedPayout, winProbs)
     simulateWeek(games, outcomes, picks.picks)
 
-    if (page !== undefined && env.ofp.makePicks) await makePicks(page, picks.picks)
+    if (page !== undefined && env.ofp.makePicks) {
+      await makePicks(page, picks.picks)
+    }
     if (browser !== undefined) await browser.close()
   }
 }
