@@ -10,6 +10,8 @@ jobs:
         name: Install
         with:
           cmd: install
+        env:
+          PUPPETEER_SKIP_DOWNLOAD: true
       - uses: borales/actions-yarn@v3.0.0
         name: Lint
         with:
