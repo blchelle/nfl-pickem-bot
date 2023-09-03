@@ -15,10 +15,11 @@ export const displayPicks = (gamesData: GameData[], pointsData: ResultPoints[][]
 
     const teamsColumn = `${winningTeam.padStart(14)} over ${losingTeam.padEnd(14)}`
     const rankColumn = `${rank.toString().padStart(2)} confidence`
+    const probColumn = `Prob: ${gameData[pick].winProb.toString().padStart(7)}`
     const winColumn = `Win: ${pointsIfWin.toString().padStart(7)}`
     const lossColumn = `Loss: ${pointsIfLose.toString().padStart(7)}`
     const netColumn = `Net: ${pointsAvg.toString().padStart(7)}`
-    const tableRow = [teamsColumn, rankColumn, winColumn, lossColumn, netColumn].join(''.padStart(5))
+    const tableRow = [teamsColumn, rankColumn, probColumn, winColumn, lossColumn, netColumn].join(''.padStart(5))
 
     console.log(tableRow)
   })

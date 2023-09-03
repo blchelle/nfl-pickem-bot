@@ -5,6 +5,7 @@ import { BestPicks, GameToPick, getBestPicks } from '@picks/bestPicks'
 import { MAX_RANK } from '@config/constants'
 import { chooseK, getExpectedPayout, getWeeklyStats, possibleScenarios } from '@utils/stats'
 import weeklyData from '@data/historicalWeeklyData.json'
+import { getBestSeasonPicks } from './bestSeasonPicks'
 
 interface BestProb {
   payout: number
@@ -31,12 +32,15 @@ export const getBestWeeklyPicks = (games: GameData[], outcomes: ResultPoints[][]
     combinations.push(...kCombinations)
   }
 
+  // Establish a baseline by making conservative picks for every game
+  const [consPicks, consPayout, consWinProbs] = getBestSeasonPicks(games, outcomes)
+  const bestProb: BestProb = { payout: consPayout, net: consPicks.net, games: [], picks: consPicks, scenarioProb: 0, winProbs: consWinProbs }
+
   const loadingBar = new cliProgress.SingleBar({}, cliProgress.Presets.shades_classic)
   loadingBar.start(totalIterations, 0)
   let progress = 0
 
   // Find the best combination, pick combo that maximizes expected money
-  const bestProb: BestProb = { payout: 0, net: Number.MIN_SAFE_INTEGER, games: [], picks: { net: Number.MIN_SAFE_INTEGER, picks: [] }, scenarioProb: 0, winProbs: [] }
   for (let i = 0; i < combinations.length; i++) {
     const gameCombination = combinations[i]
     const allScenarios = possibleScenarios(gameCombination.length)

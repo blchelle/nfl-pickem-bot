@@ -11,7 +11,7 @@ interface OfpOutcome {
   team: string
   pointsPercent: number
   rank?: number
-  won?: boolean
+  state?: 'won' | 'lost' | 'in progress' | 'not started'
 }
 
 export type OfpData = OfpOutcome[][]
@@ -31,7 +31,7 @@ const login = async (page: Page, botAccount: OfpAccount): Promise<void> => {
 
   await page.goto(buildUrl(env.ofp.host))
 
-  const toggleLoginButtonSelector = '.header_button[onclick="toggleLogIn()'
+  const toggleLoginButtonSelector = '.header_button[onclick="toggleLogIn()"]'
   const toggleLoginButton = await page.waitForSelector(toggleLoginButtonSelector)
   if (toggleLoginButton === null) throw new Error(`could not find element with selector ${toggleLoginButtonSelector}`)
   await toggleLoginButton.click()
@@ -100,13 +100,21 @@ const getCompletedGames = async (page: Page, games: OfpData): Promise<OfpData> =
 
   const pickedTeams = await page.$$eval('.btn-locked-picked span.dlg', (els) => els.map((el) => el.innerHTML.split(' (')[0]))
   const ranks = await page.$$eval('.rankResult', (els) => els.map((el) => +el.innerHTML))
-  const results = await page.$$eval('.rankResult', (els) => els.map((el) => Array.from(el.classList).includes('btn-win')))
+  const results = await page.$$eval('.rankResult', (els) => els.map((el) => {
+    if (Array.from(el.classList).includes('btn-win')) return 'won'
+    else if (Array.from(el.classList).includes('btn-loss')) return 'lost'
+    else if (Array.from(el.classList).includes('btn-block')) return 'in progress'
+    else return 'not started'
+  }))
 
   for (let i = 0; i < pickedTeams.length; i++) {
     const matchingTeam = pickedTeams[i].toLowerCase() === games[i][AWAY].team.toLowerCase() ? AWAY : HOME
     games[i][matchingTeam].rank = ranks[i]
-    games[i][matchingTeam].won = results[i]
-    games[i][1 - matchingTeam].won = !results[i]
+    games[i][matchingTeam].state = results[i]
+
+    if (results[i] === 'won') games[i][1 - matchingTeam].state = 'lost'
+    else if (results[i] === 'lost') games[i][1 - matchingTeam].state = 'won'
+    else games[i][1 - matchingTeam].state = games[i][matchingTeam].state
   }
 
   return games

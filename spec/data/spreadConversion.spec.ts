@@ -1,23 +1,7 @@
-import spreadToWinPercent from '@data/spreadConversion'
+import noVigOdds from '@data/moneylineConversion'
 
-describe(spreadToWinPercent, () => {
-  it('gives a 0.5 win chance when spread is 0', () => {
-    expect(spreadToWinPercent(0)).toBe(0.5)
-  })
-
-  it('gives a 0 win chance when spread is 17', () => {
-    expect(spreadToWinPercent(17)).toBeCloseTo(0.001)
-  })
-
-  it('gives a 0 win chance when spread is greater than 17', () => {
-    expect(spreadToWinPercent(20)).toBeCloseTo(0.001)
-  })
-
-  it('gives a 1 win chance when spread is -17', () => {
-    expect(spreadToWinPercent(-17)).toBeCloseTo(0.999)
-  })
-
-  it('gives a 1 win chance when spread is less than -17', () => {
-    expect(spreadToWinPercent(-20)).toBeCloseTo(0.999)
+describe(noVigOdds, () => {
+  it('gives 50% odds when the price is the same', () => {
+    expect(noVigOdds(1.95, 1.95)).toEqual([0.5, 0.5])
   })
 })
