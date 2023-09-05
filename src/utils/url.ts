@@ -10,8 +10,8 @@ import path from 'path'
  */
 export const buildUrl = (host: string, route: string = '', params: Record<string, string> = {}): string => {
   const paramString = Object.entries(params).map(([key, value]) => `${key}=${value}`).join('&')
-  const hostRoute = path.join(host, route)
+  const hostRoute = host + path.join('/', route)
 
-  if (paramString.length > 0) return `https://${hostRoute}?${paramString}`
-  else return `https://${hostRoute}`
+  if (paramString.length > 0) return `${hostRoute}?${paramString}`
+  else return hostRoute
 }

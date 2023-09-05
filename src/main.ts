@@ -1,6 +1,3 @@
-import puppeteer, { Browser } from 'puppeteer'
-import UserAgent from 'user-agents'
-
 import { MS_PER_DAY, MS_PER_HOUR, MS_PER_MINUTE, MS_PER_SECOND } from '@config/constants'
 import env from '@config/env'
 import flags from '@config/flags'
@@ -14,6 +11,7 @@ import { displayPicks } from '@utils/display'
 import { simulateWeek } from '@utils/simulator'
 import { getOfpData, OfpData } from '@webscraper/getData'
 import { makePicks } from '@webscraper/makePicks'
+import { initBrowser, initPage } from '@webscraper/init'
 
 const TEST_OFP_DATA = TEST_OFP_DATA_JSON as unknown as OfpData
 const TEST_ODDS_DATA = TEST_ODDS_DATA_JSON as unknown as OddsData
@@ -62,14 +60,8 @@ const executeBots = async (): Promise<void> => {
 
     // We only want to use the ofp webscraper when we need to access the site,
     // otherwise we should just use test data to avoid overusage of the site
-    let browser: Browser | undefined
-    if (env.ofp.getPicksData) {
-      browser = await puppeteer.launch({ defaultViewport: { width: 2000, height: 3000 } })
-    }
-
-    const page = browser !== undefined ? await browser.newPage() : undefined
-    const userAgent = new UserAgent()
-    await page?.setUserAgent(userAgent.random().toString())
+    const browser = await initBrowser()
+    const page = await initPage(browser)
 
     const ofpData = page !== undefined ? await getOfpData(page, bot) : TEST_OFP_DATA
     const games = mergeOfpAndOddsData(ofpData, oddsData)

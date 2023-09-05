@@ -1,6 +1,3 @@
-import { existsSync } from 'fs'
-import { readdir, unlink } from 'fs/promises'
-import path from 'path'
 import { Page } from 'puppeteer'
 
 import { AWAY, HOME } from '@config/constants'
@@ -16,57 +13,50 @@ interface OfpOutcome {
 
 export type OfpData = OfpOutcome[][]
 
-const deleteScreenshots = async (folderPath: string): Promise<void> => {
-  if (!existsSync(folderPath)) return
-
-  const files = await readdir(folderPath)
-  for (const file of files) {
-    await unlink(path.resolve(folderPath, file))
-  }
-}
-
 const login = async (page: Page, botAccount: OfpAccount): Promise<void> => {
   if (botAccount.email === undefined) throw new Error('OFP email is missing')
   if (botAccount.password === undefined) throw new Error('OFP password is missing')
 
-  await page.goto(buildUrl(env.ofp.host))
-
-  const toggleLoginButtonSelector = '.header_button[onclick="toggleLogIn()"]'
-  const toggleLoginButton = await page.waitForSelector(toggleLoginButtonSelector)
-  if (toggleLoginButton === null) throw new Error(`could not find element with selector ${toggleLoginButtonSelector}`)
-  await toggleLoginButton.click()
+  await page.screenshot({ path: 'img/1.homepage.png' })
 
   const emailInputSelector = '#username0'
   const passwordInputSelector = '#password0'
-  const checkboxSelector = '#inputRemember0'
   const loginButtonSelector = '#loginbutton0'
 
   const emailInput = await page.waitForSelector(emailInputSelector)
   const passwordInput = await page.waitForSelector(passwordInputSelector)
-  const checkbox = await page.waitForSelector(checkboxSelector)
   const loginButton = await page.waitForSelector(loginButtonSelector)
 
   if (emailInput === null) throw new Error(`could not find element with selector ${emailInputSelector}`)
   if (passwordInput === null) throw new Error(`could not find element with selector ${passwordInputSelector}`)
-  if (checkbox === null) throw new Error(`could not find element with selector ${checkboxSelector}`)
   if (loginButton === null) throw new Error(`could not find element with selector ${loginButtonSelector}`)
 
   await emailInput.type(botAccount.email)
   await passwordInput.type(botAccount.password)
-  await checkbox.click()
+
+  await page.screenshot({ path: 'img/2.homepage-login-filled.png' })
 
   await Promise.all([
-    page.waitForNavigation({ waitUntil: ['load', 'networkidle0'] }),
+    page.waitForSelector('#welcomeLabel', { visible: true, timeout: 0 }),
     loginButton.click()
   ])
+
+  await page.screenshot({ path: 'img/3.just-logged-in.png' })
 }
 
-const navigateToSearchPicksPage = async (page: Page): Promise<void> => {
+const loadSearchPicksTable = async (page: Page): Promise<void> => {
   await page.goto(buildUrl(env.ofp.host, 'picks.cfm', { p: '4' }))
-  await Promise.all([
-    page.waitForNavigation({ waitUntil: ['load', 'networkidle0'] }),
-    page.click('button[name="search"]')
-  ])
+  await page.screenshot({ path: 'img/4.search-picks-page.png' })
+
+  const searchPicksButtonSelector = 'button[name="search"]'
+  const searchPicksButton = await page.waitForSelector(searchPicksButtonSelector)
+  if (searchPicksButton === null) throw new Error(`could not find element with selector ${searchPicksButtonSelector}`)
+
+  // Clicks the button and waits for the table to appear
+  await searchPicksButton.click()
+  await page.waitForSelector('table')
+
+  await page.screenshot({ path: 'img/5.load-search-picks-table.png' })
 }
 
 const parsePicksTable = async (page: Page): Promise<OfpData> => {
@@ -96,7 +86,8 @@ const parsePicksTable = async (page: Page): Promise<OfpData> => {
 }
 
 const getCompletedGames = async (page: Page, games: OfpData): Promise<OfpData> => {
-  await page.goto(buildUrl(env.ofp.host, 'picks.cfm', { p: '1' }))
+  await page.goto(buildUrl(env.ofp.host, 'picks.cfm', { p: '1' }), { timeout: 300000 })
+  await page.screenshot({ path: 'img/e.png' })
 
   const pickedTeams = await page.$$eval('.btn-locked-picked span.dlg', (els) => els.map((el) => el.innerHTML.split(' (')[0]))
   const ranks = await page.$$eval('.rankResult', (els) => els.map((el) => +el.innerHTML))
@@ -121,9 +112,8 @@ const getCompletedGames = async (page: Page, games: OfpData): Promise<OfpData> =
 }
 
 export const getOfpData = async (page: Page, botAccount: OfpAccount): Promise<OfpData> => {
-  await deleteScreenshots('img/')
   await login(page, botAccount)
-  await navigateToSearchPicksPage(page)
+  await loadSearchPicksTable(page)
 
   let gamePickInfo = await parsePicksTable(page)
   gamePickInfo = await getCompletedGames(page, gamePickInfo)

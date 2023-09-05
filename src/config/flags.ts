@@ -12,6 +12,10 @@ const flags: Flags = {
     flag: '--help',
     description: 'Learn about the different flags that can be passed'
   },
+  headless: {
+    flag: '--headless',
+    description: 'Run the browser in headless mode'
+  },
   nflScheduleData: {
     flag: '--schedule-data',
     description: 'Get live schedule data for the upcoming week'
@@ -39,6 +43,10 @@ const flags: Flags = {
   weeklyBot: {
     flag: '--weekly-bot',
     description: 'Activate the weekly bot'
+  },
+  proxy: {
+    flag: '--proxy',
+    description: 'Use a proxy for the webscraper'
   }
 }
 

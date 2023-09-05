@@ -1,8 +1,8 @@
-import { ElementHandle, Page, TimeoutError } from 'puppeteer'
+import { ElementHandle, Page } from 'puppeteer'
 import { AWAY, HOME } from '@config/constants'
 import env from '@config/env'
 import { buildUrl } from '@utils/url'
-import { elementHandleHasClass, findElementWithInnerHTML, simulateClick } from '@webscraper/utils'
+import { elementHandleHasClass, simulateClick } from '@webscraper/utils'
 
 interface GameInputs {
   buttons: ElementHandle[]
@@ -54,7 +54,7 @@ const getPickButtons = async (page: Page): Promise<ElementHandle[][]> => {
  * @returns An array of size n, where n is the number of games
  */
 const getRankPickers = async (page: Page): Promise<ElementHandle[]> => {
-  const rankPickerSelector = '.rankResult, .dropbtn'
+  const rankPickerSelector = '.row.gamerow input.hrank'
 
   await page.waitForSelector(rankPickerSelector)
   return await page.$$(rankPickerSelector)
@@ -78,51 +78,9 @@ const pickGame = async (page: Page, gameInputs: GameInputs, pick: number[]): Pro
   // Only click the button if it hasn't been previously selected from a prior session
   if (!await elementHandleHasClass(buttons[teamPicked], 'btn-pickable-saved')) await simulateClick(buttons[teamPicked], 'Space')
 
-  // Closes the "Underdog Warning" modal, if it appears
-  await closeWarningModal(page)
-
   // Clicking the rank picker will show a dropdown
-  await page.waitForFunction((rankPickerEl) => !Array.from(rankPickerEl.classList).includes('btn-locked'), {}, rankPicker)
-  await simulateClick(rankPicker, 'Space')
-
-  // Finds the element in the dropdown corresponding with the rank picked and clicks it
-  const rankButtonSelector = '.dropdown-content.show a'
-  await page.waitForSelector(rankButtonSelector)
-  const rankButton = await findElementWithInnerHTML(await page.$$(rankButtonSelector), rankPicked.toString())
-  await simulateClick(rankButton, 'Space')
-}
-
-/**
- * Checks to see if a warning modal pops up after making a pick and closes it if it does necessary
- *
- * @param page The puppeteer.Page instance
- */
-const closeWarningModal = async (page: Page): Promise<void> => {
-  const alertModalSelector = '#alertModal[style="display: block;"]'
-
-  try {
-    // Wait for the alertModal to load, most of the time this should throw a TimeoutError
-    const alertModal = await page.waitForSelector(alertModalSelector, { timeout: 1000 })
-    if (alertModal == null) {
-      throw new Error('anomaly: alert modal is null, it should either be found or throw instead')
-    }
-
-    // Get the button to close the modal
-    const closeButton = await alertModal.waitForSelector('.modal-footer button')
-    if (closeButton == null) {
-      throw new Error('anomaly: alert modal was found but close button is null, it should be found')
-    }
-
-    // Clicks the button to close the modal and waits for the modal to dissapear
-    await simulateClick(closeButton, 'Space')
-    await page.waitForSelector('#alertModal', { hidden: true })
-  } catch (err) {
-    // A timeout error is expected, anything else is an actual error we should throw
-    if (!(err instanceof TimeoutError)) {
-      console.log('An non-timeout error occurred: ', err)
-      throw err
-    }
-  }
+  const rankPickerID = await (await rankPicker.getProperty('id')).jsonValue()
+  await page.$eval(`#${rankPickerID}`, (el, rank) => { el.setAttribute('value', rank.toString()) }, rankPicked.toString())
 }
 
 /**
@@ -136,7 +94,7 @@ const submitPicks = async (page: Page): Promise<void> => {
 
   // Waits for navigation
   await Promise.all([
-    page.waitForNavigation({ waitUntil: ['load', 'networkidle0'] }),
+    page.waitForNavigation({ waitUntil: ['load', 'networkidle0', 'domcontentloaded'], timeout: 300000 }),
     simulateClick(submitButton, 'Enter')
   ])
 }
@@ -147,7 +105,8 @@ const submitPicks = async (page: Page): Promise<void> => {
  * @param picks the picks decided by the bot
  */
 export const makePicks = async (page: Page, picks: number[][]): Promise<void> => {
-  await page.goto(buildUrl(env.ofp.host, 'picks.cfm', { p: '1' }))
+  await page.goto(buildUrl(env.ofp.host, 'picks.cfm', { p: '1' }), { timeout: 300000 })
+  await page.screenshot({ path: 'img/g.png' })
 
   const pickButtons = await getPickButtons(page)
   const rankPickers = await getRankPickers(page)
