@@ -17,8 +17,6 @@ const login = async (page: Page, botAccount: OfpAccount): Promise<void> => {
   if (botAccount.email === undefined) throw new Error('OFP email is missing')
   if (botAccount.password === undefined) throw new Error('OFP password is missing')
 
-  await page.screenshot({ path: 'img/1.homepage.png' })
-
   const emailInputSelector = '#username0'
   const passwordInputSelector = '#password0'
   const loginButtonSelector = '#loginbutton0'
@@ -34,19 +32,14 @@ const login = async (page: Page, botAccount: OfpAccount): Promise<void> => {
   await emailInput.type(botAccount.email)
   await passwordInput.type(botAccount.password)
 
-  await page.screenshot({ path: 'img/2.homepage-login-filled.png' })
-
   await Promise.all([
     page.waitForSelector('#welcomeLabel', { visible: true, timeout: 0 }),
     loginButton.click()
   ])
-
-  await page.screenshot({ path: 'img/3.just-logged-in.png' })
 }
 
 const loadSearchPicksTable = async (page: Page): Promise<void> => {
   await page.goto(buildUrl(env.ofp.host, 'picks.cfm', { p: '4' }))
-  await page.screenshot({ path: 'img/4.search-picks-page.png' })
 
   const searchPicksButtonSelector = 'button[name="search"]'
   const searchPicksButton = await page.waitForSelector(searchPicksButtonSelector)
@@ -55,8 +48,6 @@ const loadSearchPicksTable = async (page: Page): Promise<void> => {
   // Clicks the button and waits for the table to appear
   await searchPicksButton.click()
   await page.waitForSelector('table')
-
-  await page.screenshot({ path: 'img/5.load-search-picks-table.png' })
 }
 
 const parsePicksTable = async (page: Page): Promise<OfpData> => {
@@ -87,7 +78,6 @@ const parsePicksTable = async (page: Page): Promise<OfpData> => {
 
 const getCompletedGames = async (page: Page, games: OfpData): Promise<OfpData> => {
   await page.goto(buildUrl(env.ofp.host, 'picks.cfm', { p: '1' }), { timeout: 300000 })
-  await page.screenshot({ path: 'img/e.png' })
 
   const pickedTeams = await page.$$eval('.btn-locked-picked span.dlg', (els) => els.map((el) => el.innerHTML.split(' (')[0]))
   const ranks = await page.$$eval('.rankResult', (els) => els.map((el) => +el.innerHTML))

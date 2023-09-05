@@ -106,7 +106,6 @@ const submitPicks = async (page: Page): Promise<void> => {
  */
 export const makePicks = async (page: Page, picks: number[][]): Promise<void> => {
   await page.goto(buildUrl(env.ofp.host, 'picks.cfm', { p: '1' }), { timeout: 300000 })
-  await page.screenshot({ path: 'img/g.png' })
 
   const pickButtons = await getPickButtons(page)
   const rankPickers = await getRankPickers(page)
