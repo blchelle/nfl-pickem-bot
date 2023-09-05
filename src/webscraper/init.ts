@@ -74,7 +74,7 @@ export const initPage = async (browser?: Browser): Promise<Page | undefined> => 
 
 const authenticateWithProxy = async (page: Page): Promise<void> => {
   if (!env.proxy.active) return
-  if (env.proxy.apiKey === undefined) throw new Error('proxy is enabled but api key is missing')
+  if (env.proxy.user === undefined || env.proxy.password === undefined) throw new Error('proxy is enabled but user or password is missing')
 
-  await page.authenticate({ username: 'scraperapi', password: env.proxy.apiKey })
+  await page.authenticate({ username: env.proxy.user, password: env.proxy.password })
 }

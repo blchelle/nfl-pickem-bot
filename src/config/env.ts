@@ -49,7 +49,8 @@ interface ScheduleEnv {
 interface ProxyEnv {
   active: boolean
   host: string
-  apiKey?: string
+  user?: string
+  password?: string
 }
 
 const env: Env = {
@@ -88,8 +89,9 @@ const env: Env = {
   },
   proxy: {
     active: process.argv.includes(flags.proxy.flag),
-    host: 'http://proxy-server.scraperapi.com:8001',
-    apiKey: process.env.PROXY_API_KEY
+    host: 'https://pr.oxylabs.io:7777',
+    user: process.env.PROXY_USER,
+    password: process.env.PROXY_PASSWORD
   }
 }
 
