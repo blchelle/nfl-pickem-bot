@@ -1,31 +1,37 @@
-import { GameData, ResultPoints } from '@utils/game'
+import { GameData } from '@utils/game'
 import { getBestSeasonPicks } from '@picks/bestSeasonPicks'
+import { BestPicks } from './bestPicks'
 
 const testGames: GameData[] =
 [
-  [
-    { name: 'Away Team', pointDist: 0.01, winProb: 0.25, locked: false },
-    { name: 'Home Team', pointDist: 0.02, winProb: 0.75, locked: false }
-  ],
-  [
-    { name: 'Away Team', pointDist: 0.01, winProb: 0.25, locked: false },
-    { name: 'Home Team', pointDist: 0.02, winProb: 0.75, locked: false }
-  ]
-]
-
-const testOutcomes: ResultPoints[][][] = [
-  [
-    [
-      { avg: 4, lose: -3, win: 8 },
-      { avg: 3, lose: -3, win: 8 }
+  {
+    gameIndex: 0,
+    teams: [
+      { name: 'Away Team', pointDist: 0.2, winProb: 0.25, locked: false },
+      { name: 'Home Team', pointDist: 0.3, winProb: 0.75, locked: false }
     ]
-  ]
+  },
+  {
+    gameIndex: 1,
+    teams: [
+      { name: 'Away Team', pointDist: 0.3, winProb: 0.55, locked: false },
+      { name: 'Home Team', pointDist: 0.2, winProb: 0.45, locked: false }
+    ]
+  }
 ]
 
 describe(getBestSeasonPicks, () => {
   it('returns the picks and the weekly win percentage', () => {
-    const [picks] = getBestSeasonPicks(testGames, testOutcomes)
+    const best = getBestSeasonPicks(testGames)
+    const expected: BestPicks = {
+      net: 3.82,
+      picks: [
+        { gameIndex: 0, netPoints: { avg: 3.475, win: 6.7, lose: -6.2 }, pick: 1, rank: 16 },
+        { gameIndex: 1, netPoints: { avg: 0.345, win: 5.7, lose: -6.2 }, pick: 0, rank: 15 }
+      ]
+    }
 
-    expect(picks).toStrictEqual({ net: 4, picks: [[0, 16]] })
+    expect(best.net).toBeCloseTo(expected.net)
+    expect(best.picks).toStrictEqual(expected.picks)
   })
 })

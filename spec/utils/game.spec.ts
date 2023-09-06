@@ -1,21 +1,24 @@
-import { calcNetResultPoints, generateOutcomes, getFixedGames, mergeOfpAndOddsData, GameData, ResultPoints } from '@utils/game'
+import { calcNetResultPoints, getLockedGames, mergeOfpAndOddsData, GameData, ResultPoints } from '@utils/game'
 import { OfpData } from '@webscraper/getData'
 import { OddsData } from '@service/odds'
 
-const testGame: GameData = [
-  {
-    name: 'Away Team',
-    pointDist: 0.01,
-    winProb: 0.25,
-    locked: false
-  },
-  {
-    name: 'Home Team',
-    pointDist: 0.02,
-    winProb: 0.75,
-    locked: false
-  }
-]
+const testGame: GameData = {
+  gameIndex: 0,
+  teams: [
+    {
+      name: 'Away Team',
+      pointDist: 0.01,
+      winProb: 0.25,
+      locked: false
+    },
+    {
+      name: 'Home Team',
+      pointDist: 0.02,
+      winProb: 0.75,
+      locked: false
+    }
+  ]
+}
 
 describe(calcNetResultPoints, () => {
   it('calculates the point results for a win, loss, and avg for 1 seed', () => {
@@ -60,10 +63,13 @@ describe(mergeOfpAndOddsData, () => {
 
   beforeEach(() => {
     expected = [
-      [
-        { name: 'la rams', pointDist: 0.03, winProb: 0.56, locked: false },
-        { name: 'ny jets', pointDist: 0.03, winProb: 0.44, locked: false }
-      ]
+      {
+        gameIndex: 0,
+        teams: [
+          { name: 'la rams', pointDist: 0.03, winProb: 0.56, locked: false },
+          { name: 'ny jets', pointDist: 0.03, winProb: 0.44, locked: false }
+        ]
+      }
     ]
   })
 
@@ -103,58 +109,35 @@ describe(mergeOfpAndOddsData, () => {
 let testGames: GameData[] = []
 beforeEach(() => {
   testGames = [
-    [
-      { name: 'Away Team 0', pointDist: 0.3, winProb: 0.70, locked: false },
-      { name: 'Home Team 0', pointDist: 0.1, winProb: 0.30, locked: false }
-    ],
-    [
-      { name: 'Away Team 1', pointDist: 0.2, winProb: 0.40, locked: false },
-      { name: 'Home Team 1', pointDist: 0.4, winProb: 0.60, locked: false }
-    ]
+    {
+      gameIndex: 0,
+      teams: [
+        { name: 'Away Team 0', pointDist: 0.3, winProb: 0.70, locked: false },
+        { name: 'Home Team 0', pointDist: 0.1, winProb: 0.30, locked: false }
+      ]
+    },
+    {
+      gameIndex: 1,
+      teams: [
+        { name: 'Away Team 1', pointDist: 0.2, winProb: 0.40, locked: false },
+        { name: 'Home Team 1', pointDist: 0.4, winProb: 0.60, locked: false }
+      ]
+    }
   ]
 })
 
-describe(getFixedGames, () => {
-  it('returns an empty map and set for no fixed games', () => {
-    expect(getFixedGames(testGames)).toStrictEqual([{}, new Set()])
+describe(getLockedGames, () => {
+  it('returns an empty map for no fixed games', () => {
+    expect(getLockedGames(testGames)).toStrictEqual({})
   })
 
   it('returns a mapping of fixed games and ranks', () => {
-    testGames[0][0].rank = 5
-    testGames[0][0].winProb = 0
-    testGames[0][1].winProb = 1
-    testGames[0][1].locked = true
-    testGames[0][0].locked = true
+    testGames[0].teams[0].rank = 5
+    testGames[0].teams[0].winProb = 0
+    testGames[0].teams[1].winProb = 1
+    testGames[0].teams[1].locked = true
+    testGames[0].teams[0].locked = true
 
-    expect(getFixedGames(testGames)).toStrictEqual([{ 0: { rank: 5, won: 0, pick: 0 } }, new Set([5])])
-  })
-})
-
-describe(generateOutcomes, () => {
-  it('generates point outcomes for every team and rank choice', () => {
-    const expected = [
-      [
-        [
-          { avg: 3.76, lose: -3.1, win: 6.7 },
-          { avg: -2.64, lose: -9.3, win: 12.9 }
-        ],
-        [
-          { avg: 3.06, lose: -3.1, win: 5.7 },
-          { avg: -2.94, lose: -9.3, win: 11.9 }
-        ]
-      ],
-      [
-        [
-          { avg: -3.52, lose: -12.4, win: 9.8 },
-          { avg: -0.32, lose: -6.2, win: 3.6 }
-        ],
-        [
-          { avg: -3.92, lose: -12.4, win: 8.8 },
-          { avg: -0.92, lose: -6.2, win: 2.6 }
-        ]
-      ]
-    ]
-
-    expect(generateOutcomes(testGames)).toStrictEqual(expected)
+    expect(getLockedGames(testGames)).toStrictEqual({ 0: { rank: 5, pick: 0 } })
   })
 })

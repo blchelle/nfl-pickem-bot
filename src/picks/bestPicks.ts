@@ -1,85 +1,65 @@
-import { ResultPoints } from '@utils/game'
+import { GameData, ResultPoints, calcNetResultPoints } from '@utils/game'
 import { AWAY, HOME, MAX_RANK } from '@config/constants'
 
-export interface GameToPick {
-  [gameIndex: number]: { pick: number, rank: number, won?: number } | undefined
+export interface BestProb {
+  payout: number
+  scenarioProb: number
+  winProbs: number[]
+  net: number
+  picks: Pick[]
 }
 
 export interface BestPicks {
   net: number
-  picks: Array<[number, number]>
+  picks: Pick[]
 }
 
-interface Cache {
-  [remainingGames: string]: BestPicks
+export interface Pick {
+  gameIndex: number
+  pick: 0 | 1
+  rank: number
+  netPoints: ResultPoints
 }
 
-export const getBestPicks = (
-  gameData: ResultPoints[][][],
-  gameIndex: number = 0,
-  gamesPicked: GameToPick = {},
-  ranksPicked: Set<number> = new Set(),
-  cache: Cache = { '': { net: 0, picks: [] } }
-): BestPicks => {
-  const remainingRanks = new Array(gameData.length).fill(null).map((_, i) => MAX_RANK - i).filter((rank) => !ranksPicked.has(rank))
-  const cacheKey = remainingRanks.join(' ')
-  if (cache[cacheKey] !== undefined) {
-    return cache[cacheKey]
+export type LockedGames = Record<number, { pick: 0 | 1, rank: number }>
+
+export const getBestPicks = (games: GameData[], locked: LockedGames = {}): BestPicks => {
+  // Filter out games that have already happened this week
+  let futureGames = games.filter(({ gameIndex }) => locked[gameIndex] === undefined)
+
+  // Sort the array of games by the favourites probability of winning, then insert the locked games into their respective positions
+  futureGames.sort((a, b) => Math.max(a.teams[AWAY].winProb, a.teams[HOME].winProb) - Math.max(b.teams[AWAY].winProb, b.teams[HOME].winProb))
+  Object.entries(locked).sort(([,a], [,b]) => +a.rank - +b.rank).forEach(([gameIdx, { rank }]) => {
+    futureGames = [...futureGames.slice(0, rank - 1), games[+gameIdx], ...futureGames.slice(rank - 1)]
+  })
+
+  let maxPoints = 0
+  for (let rank = MAX_RANK - games.length + 1; rank <= MAX_RANK; rank++) {
+    maxPoints += rank
   }
 
-  const gamePick = gamesPicked[gameIndex]
-  if (gamePick !== undefined) {
-    const gameRankPickData = gameData[gameIndex][MAX_RANK - gamePick.rank][gamePick.pick]
-    const pickData: BestPicks = {
-      net: (gamePick.won === 0) ? gameRankPickData.lose : gameRankPickData.win,
-      picks: [[gamePick.pick, gamePick.rank]]
+  const minRank = MAX_RANK - games.length + 1
+  const picks = futureGames.map(({ gameIndex, teams }, i): Pick => {
+    const lockedPick = locked[gameIndex]
+    const rank = i + minRank
+
+    let pick: 0 | 1 = teams[AWAY].winProb > teams[HOME].winProb ? AWAY : HOME
+    if (lockedPick !== undefined) {
+      pick = lockedPick.pick
     }
 
-    const resultantPickData = getBestPicks(gameData, gameIndex + 1, gamesPicked, ranksPicked, cache)
-    pickData.net += resultantPickData.net
-    pickData.picks.push(...resultantPickData.picks)
-
-    cache[cacheKey] = pickData
-    return pickData
-  }
-
-  const bestPickData: BestPicks = { net: Number.MIN_SAFE_INTEGER, picks: [] }
-  remainingRanks.forEach((rank) => {
-    const gameRankData = gameData[gameIndex][MAX_RANK - rank]
-
-    let teamPicked: 0 | 1
-    const pickData: BestPicks = { net: 0, picks: [] }
-    if (gameRankData[AWAY].avg > gameRankData[HOME].avg) {
-      pickData.net = gameRankData[AWAY].avg
-      pickData.picks = [[AWAY, rank]]
-      teamPicked = AWAY
-    } else {
-      pickData.net = gameRankData[HOME].avg
-      pickData.picks = [[HOME, rank]]
-      teamPicked = HOME
-    }
-
-    gamesPicked[gameIndex] = { pick: teamPicked, rank }
-    ranksPicked.add(rank)
-
-    const resultantPickData = getBestPicks(
-      gameData,
-      gameIndex + 1,
-      gamesPicked,
-      ranksPicked,
-      cache
-    )
-
-    gamesPicked[gameIndex] = undefined
-    ranksPicked.delete(rank)
-
-    pickData.net += resultantPickData.net
-    if (pickData.net > bestPickData.net) {
-      bestPickData.net = pickData.net
-      bestPickData.picks = [...pickData.picks, ...resultantPickData.picks]
+    return {
+      gameIndex,
+      pick,
+      rank,
+      netPoints: calcNetResultPoints(futureGames[i], pick, rank, maxPoints)
     }
   })
 
-  cache[cacheKey] = bestPickData
-  return bestPickData
+  const net = picks.reduce((acc, pick) => acc + pick.netPoints.avg, 0)
+
+  // Return picks back to their original order
+  picks.sort((a, b) => a.gameIndex - b.gameIndex)
+
+  return { net, picks }
 }

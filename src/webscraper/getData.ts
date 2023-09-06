@@ -77,7 +77,7 @@ const parsePicksTable = async (page: Page): Promise<OfpData> => {
 }
 
 const getCompletedGames = async (page: Page, games: OfpData): Promise<OfpData> => {
-  await page.goto(buildUrl(env.ofp.host, 'picks.cfm', { p: '1' }), { timeout: 300000 })
+  await page.goto(buildUrl(env.ofp.host, 'picks.cfm', { p: '1' }))
 
   const pickedTeams = await page.$$eval('.btn-locked-picked span.dlg', (els) => els.map((el) => el.innerHTML.split(' (')[0]))
   const ranks = await page.$$eval('.rankResult', (els) => els.map((el) => +el.innerHTML))

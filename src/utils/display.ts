@@ -1,21 +1,19 @@
-import { GameData, ResultPoints } from '@utils/game'
-import { BestPicks } from '@picks/bestPicks'
-import { MAX_RANK } from '@config/constants'
+import { GameData } from '@utils/game'
+import { BestProb } from '@picks/bestPicks'
 
-export const displayPicks = (gamesData: GameData[], pointsData: ResultPoints[][][], results: BestPicks, expectedPayout: number, winProbs: number[]): void => {
-  results.picks.forEach(([pick, rank], i) => {
-    const pointData = pointsData[i][MAX_RANK - rank][pick]
-    const pointsAvg = pointData.avg.toFixed(2)
-    const pointsIfWin = pointData.win.toFixed(2)
-    const pointsIfLose = pointData.lose.toFixed(2)
+export const displayPicks = (gamesData: GameData[], best: BestProb): void => {
+  best.picks.forEach(({ netPoints, pick, rank }, i) => {
+    const pointsAvg = netPoints.avg.toFixed(2)
+    const pointsIfWin = netPoints.win.toFixed(2)
+    const pointsIfLose = netPoints.lose.toFixed(2)
 
     const gameData = gamesData[i]
-    const winningTeam = gameData[pick].name
-    const losingTeam = gameData[1 - pick].name
+    const winningTeam = gameData.teams[pick].name
+    const losingTeam = gameData.teams[1 - pick].name
 
     const teamsColumn = `${winningTeam.padStart(14)} over ${losingTeam.padEnd(14)}`
     const rankColumn = `${rank.toString().padStart(2)} confidence`
-    const probColumn = `Prob: ${gameData[pick].winProb.toString().padStart(7)}`
+    const probColumn = `Prob: ${gameData.teams[pick].winProb.toString().padStart(7)}`
     const winColumn = `Win: ${pointsIfWin.toString().padStart(7)}`
     const lossColumn = `Loss: ${pointsIfLose.toString().padStart(7)}`
     const netColumn = `Net: ${pointsAvg.toString().padStart(7)}`
@@ -25,12 +23,12 @@ export const displayPicks = (gamesData: GameData[], pointsData: ResultPoints[][]
   })
 
   console.log('')
-  console.log(`Net Points Gained: ${results.net.toFixed(2)}`)
+  console.log(`Net Points Gained: ${best.net.toFixed(2)}`)
   console.log('')
-  console.log(`First Place Probability: ${winProbs[0].toFixed(4)}`)
-  console.log(`Second Place Probability: ${winProbs[1].toFixed(4)}`)
-  console.log(`Third Place Probability: ${winProbs[2].toFixed(4)}`)
+  console.log(`First Place Probability: ${best.winProbs[0].toFixed(4)}`)
+  console.log(`Second Place Probability: ${best.winProbs[1].toFixed(4)}`)
+  console.log(`Third Place Probability: ${best.winProbs[2].toFixed(4)}`)
   console.log('')
-  console.log(`Expected Payout: $${expectedPayout.toFixed(2)}`)
+  console.log(`Expected Payout: $${best.payout.toFixed(2)}`)
   console.log('')
 }

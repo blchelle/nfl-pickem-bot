@@ -1,7 +1,7 @@
 import dotenv from 'dotenv'
 
-import { GameData, ResultPoints } from '@utils/game'
-import { BestPicks } from '@picks/bestPicks'
+import { GameData } from '@utils/game'
+import { BestProb } from '@picks/bestPicks'
 import { getBestSeasonPicks } from '@picks/bestSeasonPicks'
 import { getBestWeeklyPicks } from '@picks/bestWeeklyPicks'
 import flags from '@config/flags'
@@ -38,7 +38,7 @@ export interface OfpAccount {
   name: string
   email?: string
   password?: string
-  getBestPicksFn: (games: GameData[], outcomes: ResultPoints[][][]) => [BestPicks, number, number[]]
+  getBestPicksFn: (games: GameData[]) => BestProb
 }
 
 interface ScheduleEnv {

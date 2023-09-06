@@ -1,5 +1,6 @@
 import { ElementHandle, Page } from 'puppeteer'
 import { AWAY, HOME } from '@config/constants'
+import { Pick } from '@picks/bestPicks'
 import env from '@config/env'
 import { buildUrl } from '@utils/url'
 import { elementHandleHasClass, simulateClick } from '@webscraper/utils'
@@ -67,9 +68,9 @@ const getRankPickers = async (page: Page): Promise<ElementHandle[]> => {
  * @param gameInputs the groups of puppeter.ElementHandles that will be used to pick the team and rank
  * @param pick the team to pick and the rank to pick them at
  */
-const pickGame = async (page: Page, gameInputs: GameInputs, pick: number[]): Promise<void> => {
+const pickGame = async (page: Page, gameInputs: GameInputs, pick: Pick): Promise<void> => {
   const { buttons, rankPicker } = gameInputs
-  const [teamPicked, rankPicked] = pick
+  const { pick: teamPicked, rank } = pick
 
   // Elements with the class btn-locked are indicators that the game already happened
   const disabledButtonSelector = 'btn-locked'
@@ -80,7 +81,7 @@ const pickGame = async (page: Page, gameInputs: GameInputs, pick: number[]): Pro
 
   // Clicking the rank picker will show a dropdown
   const rankPickerID = await (await rankPicker.getProperty('id')).jsonValue()
-  await page.$eval(`#${rankPickerID}`, (el, rank) => { el.setAttribute('value', rank.toString()) }, rankPicked.toString())
+  await page.$eval(`#${rankPickerID}`, (el, rank) => { el.setAttribute('value', rank.toString()) }, rank.toString())
 }
 
 /**
@@ -94,7 +95,7 @@ const submitPicks = async (page: Page): Promise<void> => {
 
   // Waits for navigation
   await Promise.all([
-    page.waitForNavigation({ waitUntil: ['load', 'networkidle0', 'domcontentloaded'], timeout: 300000 }),
+    page.waitForNavigation({ waitUntil: ['load', 'networkidle0', 'domcontentloaded'] }),
     simulateClick(submitButton, 'Enter')
   ])
 }
@@ -104,8 +105,8 @@ const submitPicks = async (page: Page): Promise<void> => {
  * @param page the puppeteer.Page instance
  * @param picks the picks decided by the bot
  */
-export const makePicks = async (page: Page, picks: number[][]): Promise<void> => {
-  await page.goto(buildUrl(env.ofp.host, 'picks.cfm', { p: '1' }), { timeout: 300000 })
+export const makePicks = async (page: Page, picks: Pick[]): Promise<void> => {
+  await page.goto(buildUrl(env.ofp.host, 'picks.cfm', { p: '1' }))
 
   const pickButtons = await getPickButtons(page)
   const rankPickers = await getRankPickers(page)

@@ -1,7 +1,7 @@
-import { GameData, ResultPoints } from '@utils/game'
-import { MAX_RANK } from '@config/constants'
+import { GameData } from '@utils/game'
+import { Pick } from '@picks/bestPicks'
 
-export const simulateWeek = (games: GameData[], outcomes: ResultPoints[][][], picks: Array<[number, number]>, numSimulations = 100_000): void => {
+export const simulateWeek = (games: GameData[], picks: Pick[], numSimulations = 100_000): void => {
   let meanPoints = 0
   let meanNetPoints = 0
 
@@ -14,11 +14,11 @@ export const simulateWeek = (games: GameData[], outcomes: ResultPoints[][][], pi
     games.forEach((game, i) => {
       const pick = picks[i]
 
-      if (Math.random() < game[pick[0]].winProb) {
-        points += pick[1]
-        netPoints += outcomes[i][MAX_RANK - pick[1]][pick[0]].win
+      if (Math.random() < game.teams[pick.pick].winProb) {
+        points += pick.rank
+        netPoints += pick.netPoints.win
       } else {
-        netPoints += outcomes[i][MAX_RANK - pick[1]][pick[0]].lose
+        netPoints += pick.netPoints.lose
       }
     })
 

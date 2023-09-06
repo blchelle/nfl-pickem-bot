@@ -1,32 +1,44 @@
 import { displayPicks } from '@utils/display'
-import { GameData, ResultPoints } from '@utils/game'
-import { BestPicks } from '@picks/bestPicks'
+import { GameData } from '@utils/game'
+import { BestPicks, BestProb } from '@picks/bestPicks'
 
 const testGame: GameData[] =
 [
-  [
-    { name: 'Away Team', pointDist: 0.01, winProb: 0.25, locked: false },
-    { name: 'Home Team', pointDist: 0.02, winProb: 0.75, locked: false }
-  ]
-]
-
-const testOutcomes: ResultPoints[][][] = [
-  [
-    [
-      { avg: 4, lose: -3, win: 8 },
-      { avg: 3, lose: -3, win: 8 }
+  {
+    gameIndex: 0,
+    teams: [
+      { name: 'Away Team', pointDist: 0.01, winProb: 0.25, locked: false },
+      { name: 'Home Team', pointDist: 0.02, winProb: 0.75, locked: false }
     ]
-  ]
+  }
 ]
 
-const testPicks: BestPicks = { net: -2, picks: [[0, 16]] }
+const testPicks: BestPicks = {
+  net: -2,
+  picks: [
+    {
+      gameIndex: 0,
+      pick: 0,
+      rank: 16,
+      netPoints: { avg: 4, lose: -3, win: 8 }
+    }
+  ]
+}
 
 describe(displayPicks, () => {
   it('displays net points, expected payout, win probability', () => {
     let output = ''
     jest.spyOn(console, 'log').mockImplementation((log: string) => { output += log ?? '\n' })
 
-    displayPicks(testGame, testOutcomes, testPicks, 2.45, [0.01, 0.02, 0.03])
+    const best: BestProb = {
+      picks: testPicks.picks,
+      payout: 2.45,
+      winProbs: [0.01, 0.02, 0.03],
+      net: -2,
+      scenarioProb: 1
+    }
+
+    displayPicks(testGame, best)
     const expected = '     Away Team over Home Team          16 confidence     Prob:    0.25     Win:    8.00     Loss:   -3.00     Net:    4.00' +
                     '' +
                     'Net Points Gained: -2.00' +

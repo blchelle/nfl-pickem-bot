@@ -6,7 +6,7 @@ import TEST_OFP_DATA_JSON from '@data/testOfficeFootballPoolData.json'
 import TEST_SCHEDULE_DATA_JSON from '@data/testScheduleData.json'
 import { getOddsData, OddsData } from '@service/odds'
 import { getPickTimes, getNflGamesThisWeek, ScheduleData } from '@service/schedule'
-import { generateOutcomes, mergeOfpAndOddsData } from '@utils/game'
+import { mergeOfpAndOddsData } from '@utils/game'
 import { displayPicks } from '@utils/display'
 import { simulateWeek } from '@utils/simulator'
 import { getOfpData, OfpData } from '@webscraper/getData'
@@ -65,15 +65,14 @@ const executeBots = async (): Promise<void> => {
 
     const ofpData = page !== undefined ? await getOfpData(page, bot) : TEST_OFP_DATA
     const games = mergeOfpAndOddsData(ofpData, oddsData)
-    const outcomes = generateOutcomes(games)
 
     // The season bot and the weekly bot have different methods of choosing their picks
-    const [picks, expectedPayout, winProbs] = bot.getBestPicksFn(games, outcomes)
-    displayPicks(games, outcomes, picks, expectedPayout, winProbs)
-    simulateWeek(games, outcomes, picks.picks)
+    const best = bot.getBestPicksFn(games)
+    displayPicks(games, best)
+    simulateWeek(games, best.picks)
 
     if (page !== undefined && env.ofp.makePicks) {
-      await makePicks(page, picks.picks)
+      await makePicks(page, best.picks)
     }
     if (browser !== undefined) await browser.close()
   }

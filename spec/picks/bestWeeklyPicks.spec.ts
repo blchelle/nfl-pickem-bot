@@ -1,43 +1,42 @@
 import { getBestWeeklyPicks } from '@picks/bestWeeklyPicks'
+import { Pick } from '@picks/bestPicks'
 
 const testGames = [
-  [
-    { name: 'Away Team 0', pointDist: 0.3, winProb: 0.70, locked: false },
-    { name: 'Home Team 0', pointDist: 0.1, winProb: 0.30, locked: false }
-  ],
-  [
-    { name: 'Away Team 1', pointDist: 0.2, winProb: 0.40, locked: false },
-    { name: 'Home Team 1', pointDist: 0.4, winProb: 0.60, locked: false }
-  ]
-]
-
-const testOutcomes = [
-  [
-    [
-      { avg: 3.76, lose: -3.1, win: 6.7 },
-      { avg: -2.64, lose: -9.3, win: 12.9 }
-    ],
-    [
-      { avg: 3.06, lose: -3.1, win: 5.7 },
-      { avg: -2.94, lose: -9.3, win: 11.9 }
+  {
+    gameIndex: 0,
+    teams: [
+      { name: 'Away Team 0', pointDist: 0.3, winProb: 0.70, locked: false },
+      { name: 'Home Team 0', pointDist: 0.1, winProb: 0.30, locked: false }
     ]
-  ],
-  [
-    [
-      { avg: -3.52, lose: -12.4, win: 9.8 },
-      { avg: -0.32, lose: -6.2, win: 3.6 }
-    ],
-    [
-      { avg: -3.92, lose: -12.4, win: 8.8 },
-      { avg: -0.92, lose: -6.2, win: 2.6 }
+  },
+  {
+    gameIndex: 1,
+    teams: [
+      { name: 'Away Team 1', pointDist: 0.2, winProb: 0.40, locked: false },
+      { name: 'Home Team 1', pointDist: 0.4, winProb: 0.60, locked: false }
     ]
-  ]
+  }
 ]
 
 describe(getBestWeeklyPicks, () => {
   it('picks the games that maximize weekly win chance', () => {
-    const [picks] = getBestWeeklyPicks(testGames, testOutcomes)
+    const expected: Pick[] = [
+      {
+        gameIndex: 0,
+        netPoints: { avg: -2.94, win: 11.9, lose: -9.3 },
+        pick: 1,
+        rank: 15
+      },
+      {
+        gameIndex: 1,
+        netPoints: { avg: -3.52, win: 9.8, lose: -12.4 },
+        pick: 0,
+        rank: 16
+      }
+    ]
 
-    expect(picks).toStrictEqual({ net: 11.98, picks: [[1, 16], [1, 15]] })
+    const best = getBestWeeklyPicks(testGames)
+
+    expect(best.picks).toStrictEqual(expected)
   })
 })
