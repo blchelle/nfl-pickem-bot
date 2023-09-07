@@ -6,16 +6,20 @@ const testGames: GameData[] =
 [
   {
     gameIndex: 0,
+    early: false,
+    locked: false,
     teams: [
-      { name: 'Away Team', pointDist: 0.2, winProb: 0.25, locked: false },
-      { name: 'Home Team', pointDist: 0.3, winProb: 0.75, locked: false }
+      { name: 'Away Team', pointDist: 0.2, winProb: 0.25 },
+      { name: 'Home Team', pointDist: 0.3, winProb: 0.75 }
     ]
   },
   {
     gameIndex: 1,
+    early: false,
+    locked: false,
     teams: [
-      { name: 'Away Team', pointDist: 0.3, winProb: 0.55, locked: false },
-      { name: 'Home Team', pointDist: 0.2, winProb: 0.45, locked: false }
+      { name: 'Away Team', pointDist: 0.3, winProb: 0.55 },
+      { name: 'Home Team', pointDist: 0.2, winProb: 0.45 }
     ]
   }
 ]

@@ -4,18 +4,18 @@ import { OddsData } from '@service/odds'
 
 const testGame: GameData = {
   gameIndex: 0,
+  early: false,
+  locked: false,
   teams: [
     {
       name: 'Away Team',
       pointDist: 0.01,
-      winProb: 0.25,
-      locked: false
+      winProb: 0.25
     },
     {
       name: 'Home Team',
       pointDist: 0.02,
-      winProb: 0.75,
-      locked: false
+      winProb: 0.75
     }
   ]
 }
@@ -43,6 +43,7 @@ const testOddsData: OddsData = [
   {
     away_team: 'Los Angeles Rams',
     home_team: 'New York Jets',
+    commence_time: '2020-12-20T18:05:00Z',
     bookmakers: [
       {
         markets: [
@@ -65,9 +66,11 @@ describe(mergeOfpAndOddsData, () => {
     expected = [
       {
         gameIndex: 0,
+        early: true,
+        locked: false,
         teams: [
-          { name: 'la rams', pointDist: 0.03, winProb: 0.56, locked: false },
-          { name: 'ny jets', pointDist: 0.03, winProb: 0.44, locked: false }
+          { name: 'la rams', pointDist: 0.03, winProb: 0.56 },
+          { name: 'ny jets', pointDist: 0.03, winProb: 0.44 }
         ]
       }
     ]
@@ -111,16 +114,20 @@ beforeEach(() => {
   testGames = [
     {
       gameIndex: 0,
+      early: false,
+      locked: false,
       teams: [
-        { name: 'Away Team 0', pointDist: 0.3, winProb: 0.70, locked: false },
-        { name: 'Home Team 0', pointDist: 0.1, winProb: 0.30, locked: false }
+        { name: 'Away Team 0', pointDist: 0.3, winProb: 0.70 },
+        { name: 'Home Team 0', pointDist: 0.1, winProb: 0.30 }
       ]
     },
     {
       gameIndex: 1,
+      early: false,
+      locked: false,
       teams: [
-        { name: 'Away Team 1', pointDist: 0.2, winProb: 0.40, locked: false },
-        { name: 'Home Team 1', pointDist: 0.4, winProb: 0.60, locked: false }
+        { name: 'Away Team 1', pointDist: 0.2, winProb: 0.40 },
+        { name: 'Home Team 1', pointDist: 0.4, winProb: 0.60 }
       ]
     }
   ]
@@ -135,8 +142,7 @@ describe(getLockedGames, () => {
     testGames[0].teams[0].rank = 5
     testGames[0].teams[0].winProb = 0
     testGames[0].teams[1].winProb = 1
-    testGames[0].teams[1].locked = true
-    testGames[0].teams[0].locked = true
+    testGames[0].locked = true
 
     expect(getLockedGames(testGames)).toStrictEqual({ 0: { rank: 5, pick: 0 } })
   })
