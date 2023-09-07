@@ -6,9 +6,11 @@ const testGame: GameData[] =
 [
   {
     gameIndex: 0,
+    early: false,
+    locked: false,
     teams: [
-      { name: 'Away Team', pointDist: 0.01, winProb: 0.25, locked: false },
-      { name: 'Home Team', pointDist: 0.02, winProb: 0.75, locked: false }
+      { name: 'Away Team', pointDist: 0.01, winProb: 0.25 },
+      { name: 'Home Team', pointDist: 0.02, winProb: 0.75 }
     ]
   }
 ]

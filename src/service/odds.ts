@@ -18,6 +18,7 @@ interface BookmakerData {
 interface OddsGameData {
   home_team: string
   away_team: string
+  commence_time: string // Actually a Date, but its read in as a json string
   bookmakers: BookmakerData[]
 }
 
