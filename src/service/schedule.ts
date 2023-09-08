@@ -26,7 +26,7 @@ export const getPickTimes = (games: ScheduleData): Date[] => {
 
   // Offset the run times by 5 minutes to give the bots a chance to run
   // Also eliminate duplicate times
-  pickLockTimes.forEach((gameTime) => { gameTime.setMinutes(gameTime.getMinutes() - 2) })
+  pickLockTimes.forEach((gameTime) => { gameTime.setMinutes(gameTime.getMinutes() - 5) })
   return pickLockTimes.filter((date, i, self) => self.findIndex((d) => d.getTime() === date.getTime()) === i)
 }
 
