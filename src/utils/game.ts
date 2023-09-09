@@ -59,7 +59,7 @@ export const mergeOfpAndOddsData = (ofpGames: OfpData, oddsGames: OddsData): Gam
       ofpTeamToOddsApiTeam(home.team) === game.home_team.toLowerCase()
     ))
 
-    if (matchingGame == null) {
+    if (matchingGame === undefined) {
       throw new Error(`could not find a matching game for ${away.team} at ${home.team}`)
     }
 

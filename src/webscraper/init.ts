@@ -14,8 +14,7 @@ export const initBrowser = async (): Promise<Browser | undefined> => {
       ? [`--proxy-server=${env.proxy.host}`]
       : [],
     ignoreHTTPSErrors: true,
-    headless: env.browser.headless,
-    devtools: true
+    headless: env.browser.headless
   })
 }
 
