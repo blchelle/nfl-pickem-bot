@@ -55,7 +55,7 @@ const getPickButtons = async (page: Page): Promise<ElementHandle[][]> => {
  * @returns An array of size n, where n is the number of games
  */
 const getRankPickers = async (page: Page): Promise<ElementHandle[]> => {
-  const rankPickerSelector = '.row.gamerow input.hrank'
+  const rankPickerSelector = '.row.gamerow input.hrank, .row.gamerow button.rankResult'
 
   await page.waitForSelector(rankPickerSelector)
   return await page.$$(rankPickerSelector)
@@ -79,7 +79,7 @@ const pickGame = async (page: Page, gameInputs: GameInputs, pick: Pick): Promise
   // Only click the button if it hasn't been previously selected from a prior session
   if (!await elementHandleHasClass(buttons[teamPicked], 'btn-pickable-saved')) await simulateClick(buttons[teamPicked], 'Space')
 
-  // Clicking the rank picker will show a dropdown
+  // Manually updates the value of the rank picker
   const rankPickerID = await (await rankPicker.getProperty('id')).jsonValue()
   await page.$eval(`#${rankPickerID}`, (el, rank) => { el.setAttribute('value', rank.toString()) }, rank.toString())
 }
