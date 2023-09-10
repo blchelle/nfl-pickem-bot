@@ -66,7 +66,7 @@ describe(mergeOfpAndOddsData, () => {
     expected = [
       {
         gameIndex: 0,
-        early: true,
+        early: false,
         locked: false,
         teams: [
           { name: 'la rams', pointDist: 0.03, winProb: 0.56 },

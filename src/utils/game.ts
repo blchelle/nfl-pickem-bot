@@ -110,11 +110,11 @@ export const getLockedGames = (games: GameData[]): LockedGames => {
 }
 
 const isEarlyGame = (game: Date): boolean => {
-  const finalLockTime = new Date()
-  finalLockTime.setDate(finalLockTime.getDate() + (-1 - finalLockTime.getDay() + 7) % 7 + 1)
-  finalLockTime.setUTCHours(17, 0, 0, 0)
+  // Sunday, Monday, or Tuesday games are never early
+  if (game.getDay() <= 2) return false
 
-  return game.getTime() < finalLockTime.getTime()
+  // Wednesday, Thursday, Friday, Saturday Games should be early
+  return true
 }
 
 export const getMaxPoints = (numGames: number): number => {

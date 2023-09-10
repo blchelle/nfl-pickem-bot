@@ -3,6 +3,7 @@ import { Page } from 'puppeteer'
 import { AWAY, HOME } from '@config/constants'
 import env, { OfpAccount } from '@config/env'
 import { buildUrl } from '@utils/url'
+import { simulateClick } from './utils'
 
 interface OfpOutcome {
   team: string
@@ -34,7 +35,7 @@ const login = async (page: Page, botAccount: OfpAccount): Promise<void> => {
 
   await Promise.all([
     page.waitForSelector('#welcomeLabel', { visible: true, timeout: 0 }),
-    loginButton.click()
+    simulateClick(loginButton, 'Enter')
   ])
 }
 

@@ -32,7 +32,6 @@ export const initPage = async (browser?: Browser): Promise<Page | undefined> => 
     isMobile: false
   })
   await page.setJavaScriptEnabled(true)
-  page.setDefaultNavigationTimeout(0)
 
   await page.setRequestInterception(true)
   page.on(PageEmittedEvents.Request, (req) => {
