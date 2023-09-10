@@ -13,21 +13,21 @@ interface ScheduleAPIEvents {
 // GetPickTimes should return a list of unique dates occuring before the morning wave of sunday games.
 export const getPickTimes = (games: ScheduleData): Date[] => {
   const gameTimes = games.events.map((e) => new Date(e.date))
+  gameTimes.forEach((gameTime) => { gameTime.setMinutes(gameTime.getMinutes() - 5) })
 
-  // The morning wave of Sunday games starts at T18:00 UTC
-  // This is when the picks lock
-  const finalLockTime = new Date()
-  finalLockTime.setDate(finalLockTime.getDate() + (-1 - finalLockTime.getDay() + 7) % 7 + 1)
-  finalLockTime.setUTCHours(18, 0, 0, 0)
+  // Picks are available starting at 00:00 UTC Wednesday and they lock at 17:00 UTC on Sunday.
+  // Performs the following operations on the list of game times:
+  // 1. Remove games that started in the past
+  // 2. Remove games that occur after the morning wave of sunday games
+  // 3. Remove duplicate game times
+  const pickLockTimes = gameTimes
+    .filter((time) => (time.getTime() > new Date().getTime()))
+    .filter((time) => time.getUTCDay() >= 3 || (time.getUTCDay() === 0 && time.getUTCHours() < 17))
+    .filter((time, i, self) => self.findIndex((d) => d.getTime() === time.getTime()) === i)
 
-  // Filter down the list to times that are in the future but not on Monday because the picks always lock on Sunday
-  // Then, filter down further to the first game times of each day of the week
-  const pickLockTimes = gameTimes.filter((gameTime) => gameTime.getTime() > new Date().getTime() && gameTime.getTime() <= finalLockTime.getTime())
+  console.log(pickLockTimes)
 
-  // Offset the run times by 5 minutes to give the bots a chance to run
-  // Also eliminate duplicate times
-  pickLockTimes.forEach((gameTime) => { gameTime.setMinutes(gameTime.getMinutes() - 5) })
-  return pickLockTimes.filter((date, i, self) => self.findIndex((d) => d.getTime() === date.getTime()) === i)
+  return pickLockTimes
 }
 
 export const getNflGamesThisWeek = async (): Promise<ScheduleData> => {
