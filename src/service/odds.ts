@@ -30,7 +30,7 @@ export const getOddsData = async (): Promise<OddsData> => {
   const oddsApiUrl = buildUrl(
     env.oddsApi.host,
     '/v4/sports/americanfootball_nfl/odds',
-    { bookmakers: 'betonlineag', markets: 'h2h', oddsFormat: 'decimal', apiKey: env.oddsApi.apiKey }
+    { regions: 'us', markets: 'h2h', oddsFormat: 'decimal', apiKey: env.oddsApi.apiKey }
   )
   return (await axios.get(oddsApiUrl)).data
 }
