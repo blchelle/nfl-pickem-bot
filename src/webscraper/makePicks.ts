@@ -1,4 +1,4 @@
-import { ElementHandle, Page } from 'puppeteer'
+import { ElementHandle, Page, TimeoutError } from 'puppeteer'
 import { AWAY, HOME } from '@config/constants'
 import { Pick } from '@picks/bestPicks'
 import env from '@config/env'
@@ -116,5 +116,39 @@ export const makePicks = async (page: Page, picks: Pick[]): Promise<void> => {
   for (let i = 0; i < inputGroups.length; i++) await pickGame(page, inputGroups[i], picks[i])
 
   await enterMnfTotalPoints(page)
+  await closeWarningModal(page)
   await submitPicks(page)
+}
+
+/**
+ * Checks to see if a warning modal pops up after making a pick and closes it if it does necessary
+ *
+ * @param page The puppeteer.Page instance
+ */
+const closeWarningModal = async (page: Page): Promise<void> => {
+  const alertModalSelector = '#alertModal[style="display: block;"]'
+
+  try {
+    // Wait for the alertModal to load, most of the time this should throw a TimeoutError
+    const alertModal = await page.waitForSelector(alertModalSelector, { timeout: 1000 })
+    if (alertModal == null) {
+      throw new Error('anomaly: alert modal is null, it should either be found or throw instead')
+    }
+
+    // Get the button to close the modal
+    const closeButton = await alertModal.waitForSelector('.modal-footer button')
+    if (closeButton == null) {
+      throw new Error('anomaly: alert modal was found but close button is null, it should be found')
+    }
+
+    // Clicks the button to close the modal and waits for the modal to dissapear
+    await simulateClick(closeButton, 'Space')
+    await page.waitForSelector('#alertModal', { hidden: true })
+  } catch (err) {
+    // A timeout error is expected, anything else is an actual error we should throw
+    if (!(err instanceof TimeoutError)) {
+      console.log('An non-timeout error occurred: ', err)
+      throw err
+    }
+  }
 }
