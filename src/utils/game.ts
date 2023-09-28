@@ -110,11 +110,18 @@ export const getLockedGames = (games: GameData[]): LockedGames => {
 }
 
 const isEarlyGame = (game: Date): boolean => {
-  // Sunday, Monday, or Tuesday games are never early
-  if (game.getDay() <= 2) return false
+  // Wednesday - Saturday games are always early
+  if (game.getDay() >= 3) return true
 
-  // Wednesday, Thursday, Friday, Saturday Games should be early
-  return true
+  // Monday, Tuesday games are never early
+  if (game.getDay() >= 1) return false
+
+  // Sunday games are early if they're expected to finish before 17:00 UTC
+  // This is particularly important for games in Europe which typically start 3.5 hours before
+  // the morning waves of games in the US.
+  //
+  // The average nfl game takes 3 hours and 12 minutes, so we'll say 3 hours 20 minutes to be safe.
+  return game.getUTCHours() + (game.getUTCMinutes() / 60) + 3 + (20 / 60) < 17
 }
 
 export const getMaxPoints = (numGames: number): number => {
