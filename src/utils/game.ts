@@ -111,10 +111,10 @@ export const getLockedGames = (games: GameData[]): LockedGames => {
 
 const isEarlyGame = (game: Date): boolean => {
   // Wednesday - Saturday games are always early
-  if (game.getDay() >= 3) return true
+  if (game.getUTCDay() >= 3) return true
 
   // Monday, Tuesday games are never early
-  if (game.getDay() >= 1) return false
+  if (game.getUTCDay() >= 1) return false
 
   // Sunday games are early if they're expected to finish before 17:00 UTC
   // This is particularly important for games in Europe which typically start 3.5 hours before
