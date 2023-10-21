@@ -24,13 +24,16 @@ export interface Pick {
 export type LockedGames = Record<number, { pick: 0 | 1, rank: number }>
 
 export const getBestPicks = (games: GameData[], locked: LockedGames = {}): BestPicks => {
+  const missingGames = MAX_RANK - games.length
+
   // Filter out games that have already happened this week
   let futureGames = games.filter(({ gameIndex }) => locked[gameIndex] === undefined)
 
   // Sort the array of games by the favourites probability of winning, then insert the locked games into their respective positions
   futureGames.sort((a, b) => Math.max(a.teams[AWAY].winProb, a.teams[HOME].winProb) - Math.max(b.teams[AWAY].winProb, b.teams[HOME].winProb))
   Object.entries(locked).sort(([,a], [,b]) => +a.rank - +b.rank).forEach(([gameIdx, { rank }]) => {
-    futureGames = [...futureGames.slice(0, rank - 1), games[+gameIdx], ...futureGames.slice(rank - 1)]
+    const rankIndex = rank - missingGames - 1
+    futureGames = [...futureGames.slice(0, rankIndex), games[+gameIdx], ...futureGames.slice(rankIndex)]
   })
 
   let maxPoints = 0

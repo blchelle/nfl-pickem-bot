@@ -25,8 +25,6 @@ export const getPickTimes = (games: ScheduleData): Date[] => {
     .filter((time) => time.getUTCDay() >= 3 || (time.getUTCDay() === 0 && time.getUTCHours() < 17))
     .filter((time, i, self) => self.findIndex((d) => d.getTime() === time.getTime()) === i)
 
-  console.log(pickLockTimes)
-
   return pickLockTimes
 }
 
