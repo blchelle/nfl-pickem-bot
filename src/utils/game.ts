@@ -13,6 +13,7 @@ interface TeamData {
 };
 
 export interface GameData {
+  bookmaker: string
   gameIndex: number
   early: boolean
   locked: boolean
@@ -44,6 +45,7 @@ export const mergeOfpAndOddsData = (ofpGames: OfpData, oddsGames: OddsData): Gam
     // Some games have happened in the past (ie TNF), these games won't have odds
     if (away.state === 'won' || home.state === 'won') {
       return {
+        bookmaker: 'none',
         gameIndex: i,
         early: true,
         locked: true,
@@ -63,7 +65,13 @@ export const mergeOfpAndOddsData = (ofpGames: OfpData, oddsGames: OddsData): Gam
       throw new Error(`could not find a matching game for ${away.team} at ${home.team}`)
     }
 
-    const mlPrices = matchingGame.bookmakers[0].markets[0].outcomes
+    // Use pinnable if they're available
+    const pinnacleIndex = matchingGame.bookmakers.findIndex((bookmaker) => bookmaker.key === 'pinnacle')
+    const bookmakerIndex = pinnacleIndex === -1 ? 0 : pinnacleIndex
+    const bookmakerName = matchingGame.bookmakers[bookmakerIndex].key
+
+    const mlPrices = matchingGame.bookmakers[bookmakerIndex].markets[0].outcomes
+
     const early = isEarlyGame(new Date(matchingGame.commence_time))
     const awaySpreadIndex = ofpTeamToOddsApiTeam(away.team) === mlPrices[0].name.toLowerCase() ? 0 : 1
     const homeSpreadIndex = 1 - awaySpreadIndex
@@ -71,6 +79,7 @@ export const mergeOfpAndOddsData = (ofpGames: OfpData, oddsGames: OddsData): Gam
     const [homeWinProb, awayWinProb] = noVigOdds(mlPrices[homeSpreadIndex].price, mlPrices[awaySpreadIndex].price)
 
     const gameData: GameData = {
+      bookmaker: bookmakerName,
       gameIndex: i,
       early,
       locked: false,

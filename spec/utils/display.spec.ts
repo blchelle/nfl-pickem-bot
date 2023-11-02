@@ -5,6 +5,7 @@ import { BestPicks, BestProb } from '@picks/bestPicks'
 const testGame: GameData[] =
 [
   {
+    bookmaker: 'none',
     gameIndex: 0,
     early: false,
     locked: false,
@@ -41,7 +42,7 @@ describe(displayPicks, () => {
     }
 
     displayPicks(testGame, best)
-    const expected = '     Away Team over Home Team          16 confidence     Prob:    0.25     Win:    8.00     Loss:   -3.00     Net:    4.00' +
+    const expected = '     Away Team over Home Team          16 confidence     Bookmaker: none      Prob:    0.25     Win:    8.00     Loss:   -3.00     Net:    4.00' +
                     '' +
                     'Net Points Gained: -2.00' +
                     '' +

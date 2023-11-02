@@ -12,6 +12,7 @@ interface MarketData {
 }
 
 interface BookmakerData {
+  key: string
   markets: MarketData[]
 }
 
@@ -30,7 +31,7 @@ export const getOddsData = async (): Promise<OddsData> => {
   const oddsApiUrl = buildUrl(
     env.oddsApi.host,
     '/v4/sports/americanfootball_nfl/odds',
-    { regions: 'us', markets: 'h2h', oddsFormat: 'decimal', apiKey: env.oddsApi.apiKey }
+    { regions: 'eu', markets: 'h2h', oddsFormat: 'decimal', apiKey: env.oddsApi.apiKey }
   )
   return (await axios.get(oddsApiUrl)).data
 }

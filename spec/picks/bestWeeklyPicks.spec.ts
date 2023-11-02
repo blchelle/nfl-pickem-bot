@@ -8,6 +8,7 @@ describe(getBestWeeklyPicks, () => {
   beforeEach(() => {
     testGames = [
       {
+        bookmaker: 'none',
         gameIndex: 0,
         early: false,
         locked: false,
@@ -17,6 +18,7 @@ describe(getBestWeeklyPicks, () => {
         ]
       },
       {
+        bookmaker: 'none',
         gameIndex: 1,
         early: false,
         locked: false,

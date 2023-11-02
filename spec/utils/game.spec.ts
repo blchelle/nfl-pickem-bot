@@ -3,6 +3,7 @@ import { OfpData } from '@webscraper/getData'
 import { OddsData } from '@service/odds'
 
 const testGame: GameData = {
+  bookmaker: 'none',
   gameIndex: 0,
   early: false,
   locked: false,
@@ -46,6 +47,7 @@ const testOddsData: OddsData = [
     commence_time: '2020-12-20T18:05:00Z',
     bookmakers: [
       {
+        key: 'pinnacle',
         markets: [
           {
             outcomes: [
@@ -65,6 +67,7 @@ describe(mergeOfpAndOddsData, () => {
   beforeEach(() => {
     expected = [
       {
+        bookmaker: 'pinnacle',
         gameIndex: 0,
         early: false,
         locked: false,
@@ -113,6 +116,7 @@ let testGames: GameData[] = []
 beforeEach(() => {
   testGames = [
     {
+      bookmaker: 'none',
       gameIndex: 0,
       early: false,
       locked: false,
@@ -122,6 +126,7 @@ beforeEach(() => {
       ]
     },
     {
+      bookmaker: 'none',
       gameIndex: 1,
       early: false,
       locked: false,

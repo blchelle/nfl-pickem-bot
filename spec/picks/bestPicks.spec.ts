@@ -4,6 +4,7 @@ import { GameData } from '@utils/game'
 const testGames: GameData[] =
 [
   {
+    bookmaker: 'none',
     gameIndex: 0,
     early: false,
     locked: false,
@@ -13,6 +14,7 @@ const testGames: GameData[] =
     ]
   },
   {
+    bookmaker: 'none',
     gameIndex: 1,
     early: false,
     locked: false,
