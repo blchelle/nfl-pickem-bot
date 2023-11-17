@@ -130,7 +130,7 @@ const isEarlyGame = (game: Date): boolean => {
   // the morning waves of games in the US.
   //
   // The average nfl game takes 3 hours and 12 minutes, so we'll say 3 hours 20 minutes to be safe.
-  return game.getUTCHours() + (game.getUTCMinutes() / 60) + 3 + (20 / 60) < 17
+  return game.getUTCHours() + (game.getUTCMinutes() / 60) + 3 + (20 / 60) < 18
 }
 
 export const getMaxPoints = (numGames: number): number => {
