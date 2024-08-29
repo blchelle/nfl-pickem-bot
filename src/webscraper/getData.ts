@@ -34,7 +34,7 @@ const login = async (page: Page, botAccount: OfpAccount): Promise<void> => {
   await passwordInput.type(botAccount.password)
 
   await Promise.all([
-    page.waitForSelector('#welcomeLabel', { visible: true, timeout: 0 }),
+    page.waitForSelector('.activePool', { visible: true }),
     simulateClick(loginButton, 'Enter')
   ])
 }
